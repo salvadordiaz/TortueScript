@@ -1,4 +1,4 @@
-package com.sfeir.gwt.tortugwt.client;
+package com.sfeir.gwt.tortugwt.client.editor;
 
 import com.google.common.base.Joiner;
 import com.google.gwt.canvas.client.Canvas;
@@ -13,10 +13,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.sfeir.gwt.tortugwt.client.Messages;
 
 public class Workspace extends Composite implements WorkspaceDisplay {
 
-	interface UserCanvasUiBinder extends UiBinder<Widget, Workspace> {
+	interface WorkspaceUiBinder extends UiBinder<Widget, Workspace> {
 	}
 
 	private static final double PEN_WIDTH = 1;
@@ -41,7 +42,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	private double currentAngle;
 
 	public Workspace() {
-		UserCanvasUiBinder uiBinder = GWT.create(UserCanvasUiBinder.class);
+		WorkspaceUiBinder uiBinder = GWT.create(WorkspaceUiBinder.class);
 		initWidget(uiBinder.createAndBindUi(this));
 		context = canvas.getContext2d();
 		messages = GWT.create(Messages.class);

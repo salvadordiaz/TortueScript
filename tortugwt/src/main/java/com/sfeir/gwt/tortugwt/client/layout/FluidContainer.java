@@ -3,9 +3,9 @@ package com.sfeir.gwt.tortugwt.client.layout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FluidContainer extends Composite {
@@ -16,15 +16,20 @@ public class FluidContainer extends Composite {
 	}
 
 	@UiField
-	Sidebar sidebar;
+	SimplePanel sidebarContainer;
 	@UiField
-	HTMLPanel container;
+	SimplePanel centerContainer;
 
 	public FluidContainer() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void setCenterWidget(IsWidget widget) {
-		container.add(widget);
+	public AcceptsOneWidget getSidebarContainer() {
+		return sidebarContainer;
 	}
+
+	public AcceptsOneWidget getCenterContainer() {
+		return centerContainer;
+	}
+
 }

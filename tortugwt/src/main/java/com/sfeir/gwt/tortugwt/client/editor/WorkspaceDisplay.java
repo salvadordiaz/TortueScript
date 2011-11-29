@@ -1,4 +1,4 @@
-package com.sfeir.gwt.tortugwt.client;
+package com.sfeir.gwt.tortugwt.client.editor;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
