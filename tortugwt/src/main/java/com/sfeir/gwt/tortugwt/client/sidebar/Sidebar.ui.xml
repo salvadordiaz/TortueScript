@@ -4,9 +4,9 @@
 		<div class="well">
 			<h5>Examples</h5>
 			<ul>
-				<li><a href="#editor:box">Box</a></li>
-				<li><a href="#editor:flower">Flower</a></li>
-				<li><a href="#editor:flower2">Other Flower</a></li>
+				<li><a href="#editor:Box">Box</a></li>
+				<li><a href="#editor:Flower">Flower</a></li>
+				<li><a href="#editor:OtherFlower">Other Flower</a></li>
 			</ul>
 			<h5>Your drawings</h5>
 			<ul ui:field="savedItems">

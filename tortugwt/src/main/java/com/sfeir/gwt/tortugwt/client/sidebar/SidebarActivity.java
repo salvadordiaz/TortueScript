@@ -2,6 +2,8 @@ package com.sfeir.gwt.tortugwt.client.sidebar;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -21,6 +23,7 @@ public class SidebarActivity extends AbstractActivity {
 	private final SidebarDisplay sidebarDisplay;
 	private final LocalizedCommands commands;
 
+	@Inject
 	public SidebarActivity(SidebarDisplay sidebarDisplay, LocalizedCommands commands) {
 		this.sidebarDisplay = sidebarDisplay;
 		this.commands = commands;
@@ -34,8 +37,6 @@ public class SidebarActivity extends AbstractActivity {
 		} else {
 			displaySavedPrograms(localStorage);
 		}
-		sidebarDisplay.addItem("test");
-		sidebarDisplay.addItem("test2");
 	}
 
 	private void loadExamples(final Storage localStorage) {

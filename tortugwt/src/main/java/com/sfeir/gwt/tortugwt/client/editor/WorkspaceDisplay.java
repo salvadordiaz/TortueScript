@@ -1,13 +1,14 @@
 package com.sfeir.gwt.tortugwt.client.editor;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface WorkspaceDisplay extends IsWidget {
 
 	HasClickHandlers getExecuteButton();
 
-	String getText();
+	HasText getEditor();
 
 	void newCommand();
 	

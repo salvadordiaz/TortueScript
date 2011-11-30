@@ -11,6 +11,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.sfeir.gwt.tortugwt.client.Messages;
@@ -80,8 +81,8 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	}
 
 	@Override
-	public String getText() {
-		return textArea.getText();
+	public HasText getEditor() {
+		return textArea;
 	}
 
 	@Override
