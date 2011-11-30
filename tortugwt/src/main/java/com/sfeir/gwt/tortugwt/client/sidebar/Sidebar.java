@@ -1,17 +1,25 @@
 package com.sfeir.gwt.tortugwt.client.sidebar;
 
+import javax.inject.Inject;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.UListElement;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.sfeir.gwt.tortugwt.client.Messages;
 import com.sfeir.gwt.tortugwt.client.sidebar.SidebarActivity.SidebarDisplay;
 
 public class Sidebar extends Composite implements SidebarDisplay {
@@ -22,12 +30,34 @@ public class Sidebar extends Composite implements SidebarDisplay {
 	}
 
 	@UiField
+	Element examplesHeader;
+	@UiField
+	Element savedItemsHeader;
+	@UiField
 	UListElement savedItems;
 	@UiField
 	LIElement defaultItem;
+	@UiField
+	Anchor syntaxLabel;
 
-	public Sidebar() {
+	@UiField
+	TortueScriptReference syntaxPopup;
+
+	private final Messages messages;
+
+	@Inject
+	public Sidebar(Messages messages) {
+		this.messages = messages;
 		initWidget(uiBinder.createAndBindUi(this));
+		syntaxLabel.setText(messages.showSyntax());
+		examplesHeader.setInnerText(messages.examples());
+		savedItemsHeader.setInnerText(messages.savedItems());
+		defaultItem.setInnerText(messages.noSavedItems());
+	}
+
+	@UiFactory
+	TortueScriptReference makeReference() {
+		return new TortueScriptReference(messages);
 	}
 
 	@Override
@@ -37,10 +67,10 @@ public class Sidebar extends Composite implements SidebarDisplay {
 			savedItems.removeChild(savedItems.getChild(childIndex));
 		}
 	}
-	
+
 	@Override
 	public void addItem(String key) {
-		if(defaultItem.hasParentElement()){
+		if (defaultItem.hasParentElement()) {
 			savedItems.removeChild(defaultItem);
 		}
 		AnchorElement anchorElement = Document.get().createAnchorElement();
@@ -51,4 +81,20 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		savedItems.appendChild(newItem);
 	}
 
+	@UiHandler("syntaxLabel")
+	void showSyntaxPopup(ClickEvent event) {
+		if (!syntaxPopup.isVisible()) {
+			syntaxPopup.setVisible(true);
+			syntaxLabel.setText(messages.hideSyntax());
+		} else {
+			syntaxPopup.setVisible(false);
+			syntaxLabel.setText(messages.showSyntax());
+		}
+	}
+
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		syntaxPopup.setPosition(syntaxLabel);
+	}
 }

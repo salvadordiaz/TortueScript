@@ -1,17 +1,27 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:t="urn:import:com.sfeir.gwt.tortugwt.client.sidebar">
 	<g:HTMLPanel>
 		<div class="well">
-			<h5>Examples</h5>
+			<h5 ui:field="examplesHeader" />
 			<ul>
-				<li><a href="#editor:Box">Box</a></li>
-				<li><a href="#editor:Flower">Flower</a></li>
-				<li><a href="#editor:OtherFlower">Other Flower</a></li>
+				<li>
+					<a href="#editor:Box">Box</a>
+				</li>
+				<li>
+					<a href="#editor:Flower">Flower</a>
+				</li>
+				<li>
+					<a href="#editor:OtherFlower">Other Flower</a>
+				</li>
 			</ul>
-			<h5>Your drawings</h5>
+			<h5 ui:field="savedItemsHeader" />
 			<ul ui:field="savedItems">
-				<li ui:field="defaultItem">You don't have any saved drawings</li>
+				<li ui:field="defaultItem" />
 			</ul>
+			<h5>
+				<g:Anchor ui:field="syntaxLabel" href="javascript:void(0)" />
+			</h5>
+			<t:TortueScriptReference ui:field="syntaxPopup"/>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

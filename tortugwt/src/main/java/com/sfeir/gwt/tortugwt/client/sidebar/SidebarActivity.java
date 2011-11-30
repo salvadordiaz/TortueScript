@@ -17,6 +17,7 @@ public class SidebarActivity extends AbstractActivity {
 
 	public interface SidebarDisplay extends IsWidget {
 		void clearUserItems();
+
 		void addItem(String key);
 	}
 
