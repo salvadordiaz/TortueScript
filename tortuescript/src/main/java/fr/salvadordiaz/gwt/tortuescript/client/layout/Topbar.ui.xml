@@ -1,0 +1,23 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		body {
+			padding-top: 60px;
+		}
+	</ui:style>	
+	<g:HTMLPanel styleName="topbar">
+		<div class="topbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="#">TortueScript</a>
+				<ul class="nav" ui:field="navigationList">
+					<li class="active">
+						<a href="#editor:">Editor</a>
+					</li>
+				</ul>
+				<p class="pull-right">
+					<a href="https://github.com/salvadordiaz/tortuescript" target="blank">About</a>
+				</p>
+			</div>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

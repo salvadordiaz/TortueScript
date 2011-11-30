@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:t="urn:import:fr.salvadordiaz.gwt.tortuescript.client.sidebar">
+	<g:HTMLPanel>
+		<div class="well">
+			<h5 ui:field="examplesHeader" />
+			<ul>
+				<li>
+					<a href="#editor:Box">Box</a>
+				</li>
+				<li>
+					<a href="#editor:Flower">Flower</a>
+				</li>
+				<li>
+					<a href="#editor:OtherFlower">Other Flower</a>
+				</li>
+			</ul>
+			<h5 ui:field="savedItemsHeader" />
+			<ul ui:field="savedItems">
+				<li ui:field="defaultItem" />
+			</ul>
+			<h5>
+				<g:Anchor ui:field="syntaxLabel" href="javascript:void(0)" />
+			</h5>
+			<t:TortueScriptReference ui:field="syntaxPopup"/>
+			<h5>
+				<g:Anchor ui:field="clearProgramsLabel" href="javascript:void(0)" />
+			</h5>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 
