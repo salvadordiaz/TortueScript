@@ -7,7 +7,9 @@
 			<g:Button ui:field="button" styleName="btn success"/>
 		</div>
 		<div class="row">
-			<c:Canvas ui:field="canvas" styleName="{style.canvas} span10 offset5" coordinateSpaceHeight="800" coordinateSpaceWidth="800" />
+			<div class="{style.center}">
+				<c:Canvas ui:field="canvas" styleName="{style.canvas} span16" coordinateSpaceHeight="800" coordinateSpaceWidth="800" />
+			</div>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

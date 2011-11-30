@@ -5,9 +5,8 @@
 }
 
 .canvas {
-	width: 800px;
-	height: 800px;
-/* 	background: #000; */
+	width: 600px;
+	height: 600px;
 	border: 10px solid #000;
 	-webkit-box-shadow: #131313 0px 2px 10px;
 	-moz-box-shadow: #131313 0px 3px 10px;
@@ -21,4 +20,10 @@
 	width: 100%;
 	height: 150px;
 	margin-bottom: 10px;
+}
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 620px;
 }
