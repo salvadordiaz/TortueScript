@@ -1,14 +1,19 @@
 package com.sfeir.gwt.tortugwt.client.editor;
 
+import static com.google.common.base.Strings.*;
+
 import com.google.common.base.Joiner;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
@@ -22,6 +27,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	interface WorkspaceUiBinder extends UiBinder<Widget, Workspace> {
 	}
 
+	private static final String ERROR_STYLE = "error";
 	private static final double PEN_WIDTH = 1;
 
 	@UiField
@@ -63,12 +69,24 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		return Canvas.createIfSupported();
 	}
 
-	private final int factor = 1;
-	
+	@UiHandler("nameInput")
+	void errorIfEmptyName(BlurEvent event) {
+		if (nullToEmpty(nameInput.getText()).trim().isEmpty()) {
+			nameInput.addStyleName(ERROR_STYLE);
+			saveButton.setEnabled(false);
+		}
+	}
+
+	@UiHandler("nameInput")
+	void clearErrorOnFocus(FocusEvent event) {
+		nameInput.removeStyleName(ERROR_STYLE);
+		saveButton.setEnabled(true);
+	}
+
 	private void updatePosition(double length, boolean forward) {
 		double direction = forward ? 1.0 : -1.0;
-		double newX = currentX + factor * direction * length * Math.cos(currentAngle);
-		double newY = currentY + factor * length * Math.sin(currentAngle);
+		double newX = currentX + direction * length * Math.cos(currentAngle);
+		double newY = currentY + length * Math.sin(currentAngle);
 		if (penDown) {
 			context.beginPath();
 			context.setLineWidth(PEN_WIDTH);
@@ -90,10 +108,15 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	public HasClickHandlers getSaveButton() {
 		return saveButton;
 	}
-	
+
 	@Override
-	public HasText getEditor() {
+	public HasText getCodeEditor() {
 		return textArea;
+	}
+
+	@Override
+	public HasText getNameEditor() {
+		return nameInput;
 	}
 
 	@Override
@@ -183,24 +206,24 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		context.restore();
 		//FIXME: are the transformations used correctly ?
 	}
-	
-	private void updateFont(){
+
+	private void updateFont() {
 		context.save();
 		context.setFont(fontJoiner.join(fontStyle, fontSize, fontName));
 	}
-	
+
 	@Override
 	public void fontSize(int fontSize) {
 		this.fontSize = fontSize + "px";
 		updateFont();
 	}
-	
+
 	@Override
 	public void fontStyle(String fontStyle) {
 		this.fontStyle = fontStyle;
 		updateFont();
 	}
-	
+
 	@Override
 	public void fontName(String fontName) {
 		this.fontName = fontName;

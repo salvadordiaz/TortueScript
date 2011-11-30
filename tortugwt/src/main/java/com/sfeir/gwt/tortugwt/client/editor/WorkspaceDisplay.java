@@ -6,14 +6,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface WorkspaceDisplay extends IsWidget {
 
+	HasText getCodeEditor();
+
 	HasClickHandlers getExecuteButton();
-	
+
 	HasClickHandlers getSaveButton();
 
-	HasText getEditor();
+	HasText getNameEditor();
 
 	void newCommand();
-	
+
 	void penDown();
 
 	void penUp();

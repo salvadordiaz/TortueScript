@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.storage.client.Storage;
+import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.sfeir.gwt.tortugwt.client.LocalizedCommands;
@@ -15,6 +16,7 @@ import com.sfeir.gwt.tortugwt.client.LocalizedCommands;
 public class SidebarActivity extends AbstractActivity {
 
 	public interface SidebarDisplay extends IsWidget {
+		void clearUserItems();
 		void addItem(String key);
 	}
 
@@ -37,6 +39,13 @@ public class SidebarActivity extends AbstractActivity {
 		} else {
 			displaySavedPrograms(localStorage);
 		}
+		Storage.addStorageEventHandler(new StorageEvent.Handler() {
+			@Override
+			public void onStorageChange(StorageEvent event) {
+				sidebarDisplay.clearUserItems();
+				displaySavedPrograms(localStorage);
+			}
+		});
 	}
 
 	private void loadExamples(final Storage localStorage) {

@@ -6,7 +6,7 @@
 		<div class="{style.editor} hero-unit">
 			<g:TextArea ui:field="textArea" styleName="{style.text}" />
 			<g:Button ui:field="executeButton" styleName="btn success" />
-			<g:Button ui:field="saveButton" styleName="btn" />
+			<g:Button ui:field="saveButton" styleName="btn" enabled="false"/>
 			<g:TextBox styleName="xlarge" ui:field="nameInput" visibleLength="30" />
 		</div>
 		<div class="row">

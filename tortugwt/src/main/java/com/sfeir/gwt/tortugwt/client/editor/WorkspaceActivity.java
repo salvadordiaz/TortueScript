@@ -50,11 +50,11 @@ public class WorkspaceActivity extends AbstractActivity {
 	}
 
 	public void setPlace(Place place) {
-		programName = ((WorkspacePlace) place).getProgramName();
-		if (!isNullOrEmpty(programName)) {
+		programName = nullToEmpty(((WorkspacePlace) place).getProgramName()).trim();
+		if (!programName.isEmpty()) {
 			final String program = Storage.getLocalStorageIfSupported().getItem(programName);
-			workspace.getEditor().setText(program);
-			execute(program);
+			workspace.getCodeEditor().setText(program);
+			execute();
 		}
 	}
 
@@ -67,8 +67,13 @@ public class WorkspaceActivity extends AbstractActivity {
 		workspace.getExecuteButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final String text = workspace.getEditor().getText();
-				execute(text);
+				execute();
+			}
+		});
+		workspace.getSaveButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				save();
 			}
 		});
 		eventBus.addHandler(PlaceChangeRequestEvent.TYPE, new PlaceChangeRequestEvent.Handler() {
@@ -79,18 +84,26 @@ public class WorkspaceActivity extends AbstractActivity {
 		});
 	}
 
+	private void save() {
+		final String nameToSave = nullToEmpty(workspace.getNameEditor().getText()).trim();
+		final String programToSave = nullToEmpty(workspace.getCodeEditor().getText()).trim();
+		if (!nameToSave.isEmpty() && !programToSave.isEmpty()) {
+			Storage.getLocalStorageIfSupported().setItem(nameToSave, programToSave);
+		}
+	}
+
+	private void execute() {
+		final List<String> lines = ImmutableList.copyOf(lineSplitter.split(workspace.getCodeEditor().getText()));
+		final List<Iterable<String>> lineTokens = transform(lines, splitTokens);
+		interpret(lineTokens);
+	}
+
 	private final Function<String, Iterable<String>> splitTokens = new Function<String, Iterable<String>>() {
 		@Override
 		public Iterable<String> apply(String input) {
 			return tokenSplitter.split(input);
 		}
 	};
-
-	private void execute(final String text) {
-		final List<String> lines = ImmutableList.copyOf(lineSplitter.split(text));
-		final List<Iterable<String>> lineTokens = transform(lines, splitTokens);
-		interpret(lineTokens);
-	}
 
 	private void interpret(List<Iterable<String>> linesAsTokens) {
 		for (int lineIndex = 0; lineIndex < linesAsTokens.size(); lineIndex++) {

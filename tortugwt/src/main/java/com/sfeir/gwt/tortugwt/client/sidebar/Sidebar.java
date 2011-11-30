@@ -4,6 +4,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.LIElement;
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,6 +30,14 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
+	@Override
+	public void clearUserItems() {
+		final NodeList<Node> childNodes = savedItems.getChildNodes();
+		for (int childIndex = 0; childIndex < childNodes.getLength(); childIndex++) {
+			savedItems.removeChild(savedItems.getChild(childIndex));
+		}
+	}
+	
 	@Override
 	public void addItem(String key) {
 		if(defaultItem.hasParentElement()){
