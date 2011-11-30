@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -39,9 +40,10 @@ public class Sidebar extends Composite implements SidebarDisplay {
 	LIElement defaultItem;
 	@UiField
 	Anchor syntaxLabel;
-
 	@UiField
 	TortueScriptReference syntaxPopup;
+	@UiField
+	Anchor clearProgramsLabel;
 
 	private final Messages messages;
 
@@ -53,11 +55,7 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		examplesHeader.setInnerText(messages.examples());
 		savedItemsHeader.setInnerText(messages.savedItems());
 		defaultItem.setInnerText(messages.noSavedItems());
-	}
-
-	@UiFactory
-	TortueScriptReference makeReference() {
-		return new TortueScriptReference(messages);
+		clearProgramsLabel.setText(messages.clearSavedItems());
 	}
 
 	@Override
@@ -79,6 +77,16 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		LIElement newItem = Document.get().createLIElement();
 		newItem.appendChild(anchorElement);
 		savedItems.appendChild(newItem);
+	}
+
+	@Override
+	public HasClickHandlers getClearButton() {
+		return clearProgramsLabel;
+	}
+
+	@UiFactory
+	TortueScriptReference makeReference() {
+		return new TortueScriptReference(messages);
 	}
 
 	@UiHandler("syntaxLabel")

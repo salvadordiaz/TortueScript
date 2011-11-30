@@ -6,6 +6,9 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.storage.client.StorageEvent;
@@ -19,6 +22,8 @@ public class SidebarActivity extends AbstractActivity {
 		void clearUserItems();
 
 		void addItem(String key);
+		
+		HasClickHandlers getClearButton();
 	}
 
 	private final List<String> exampleNames = ImmutableList.of("Box", "Flower", "OtherFlower");
@@ -45,6 +50,13 @@ public class SidebarActivity extends AbstractActivity {
 			public void onStorageChange(StorageEvent event) {
 				sidebarDisplay.clearUserItems();
 				displaySavedPrograms(localStorage);
+			}
+		});
+		sidebarDisplay.getClearButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				localStorage.clear();
+				loadExamples(localStorage);
 			}
 		});
 	}

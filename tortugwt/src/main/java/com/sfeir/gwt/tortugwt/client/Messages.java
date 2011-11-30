@@ -13,6 +13,9 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("You don''t have any saved drawings")
 	String noSavedItems();
 
+	@DefaultMessage("Delete all saved drawings")
+	String clearSavedItems();
+
 	@DefaultMessage("Show syntax")
 	String showSyntax();
 
