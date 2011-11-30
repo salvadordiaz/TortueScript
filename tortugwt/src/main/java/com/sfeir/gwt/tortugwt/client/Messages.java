@@ -1,10 +1,12 @@
 package com.sfeir.gwt.tortugwt.client;
 
-
 public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Execute !")
 	String execute();
+
+	@DefaultMessage("Save program as : ")
+	String save();
 
 	@DefaultMessage("Unclosed REPEAT statement (opened at line {0})")
 	String unclosedRepeatStatement(int lineIndex);

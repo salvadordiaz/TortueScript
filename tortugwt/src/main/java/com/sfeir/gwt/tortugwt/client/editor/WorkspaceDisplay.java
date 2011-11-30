@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface WorkspaceDisplay extends IsWidget {
 
 	HasClickHandlers getExecuteButton();
+	
+	HasClickHandlers getSaveButton();
 
 	HasText getEditor();
 

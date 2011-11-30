@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.sfeir.gwt.tortugwt.client.Messages;
 
@@ -28,7 +29,11 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	@UiField
 	TextArea textArea;
 	@UiField
-	Button button;
+	Button executeButton;
+	@UiField
+	TextBox nameInput;
+	@UiField
+	Button saveButton;
 
 	private final Context2d context;
 	private final Messages messages;
@@ -47,7 +52,8 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		initWidget(uiBinder.createAndBindUi(this));
 		context = canvas.getContext2d();
 		messages = GWT.create(Messages.class);
-		button.setText(messages.execute());
+		executeButton.setText(messages.execute());
+		saveButton.setText(messages.save());
 		//set the initial position to the center of the canvas
 		home();
 	}
@@ -77,9 +83,14 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 
 	@Override
 	public HasClickHandlers getExecuteButton() {
-		return button;
+		return executeButton;
 	}
 
+	@Override
+	public HasClickHandlers getSaveButton() {
+		return saveButton;
+	}
+	
 	@Override
 	public HasText getEditor() {
 		return textArea;
