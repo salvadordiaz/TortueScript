@@ -12,6 +12,10 @@ public class WorkspacePlace extends Place {
 
 	private final String programName;
 
+	public WorkspacePlace() {
+		programName = null;
+	}
+
 	public WorkspacePlace(String programName) {
 		this.programName = programName;
 	}

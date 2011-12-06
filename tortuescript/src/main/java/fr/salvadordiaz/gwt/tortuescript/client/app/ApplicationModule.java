@@ -5,8 +5,6 @@ import javax.inject.Singleton;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -14,6 +12,8 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
 import com.google.inject.Provides;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
 import fr.salvadordiaz.gwt.tortuescript.client.editor.Workspace;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceActivity;
@@ -41,24 +41,14 @@ public class ApplicationModule extends AbstractGinModule {
 
 		bind(WorkspaceDisplay.class).to(Workspace.class).in(Singleton.class);
 		bind(WorkspaceActivity.class).in(Singleton.class);
-
-	}
-
-	@Provides
-	@Singleton
-	com.google.web.bindery.event.shared.EventBus provideNewEventBus(EventBus eventBus){
-		return eventBus;
-	}
-	
-	@Provides
-	@Singleton
-	Place provideDefaultPlace() {
-		return new WorkspacePlace("");
+		//this is the configuration of the default place
+		bind(Place.class).to(WorkspacePlace.class).in(Singleton.class);
 	}
 
 	@Provides
 	@Singleton
 	ActivityMapper provideActivityMapper(final WorkspaceActivity workspaceActivity) {
+		//there is only one activity, the ActivityMapper will always return the workspaceActivity, setting the new place before doing so
 		return new ActivityMapper() {
 			@Override
 			public Activity getActivity(Place place) {
@@ -70,29 +60,23 @@ public class ApplicationModule extends AbstractGinModule {
 
 	@Provides
 	@Singleton
-	PlaceController providePlaceController(//
-			com.google.web.bindery.event.shared.EventBus eventBus,//
+	PlaceHistoryHandler provideHistoryHandler(//
+			EventBus eventBus,//
+			PlaceHistoryMapper mapper,//
+			Place place,// default place
 			ActivityMapper activityMapper,//
 			FluidContainer display,//
 			SidebarActivity sidebarActivity) {
+		// this is a good place to create the activity manager(s): just before the placeHistoryHandler is created 
+		// ( because that's the moment when the application is started, through a call to placeHistoryHandler.handleCurrentHistory() )
 		final ActivityManager workspaceActivityManager = new ActivityManager(activityMapper, eventBus);
 		workspaceActivityManager.setDisplay(display.getCenterContainer());
+		// sidebar activity is the only activity in its display region so it doesn't need to be managed by an ActivityManager,
+		// it can be started directly from the beginning of the application lifecycle
 		sidebarActivity.start(display.getSidebarContainer(), null);
-
-		final PlaceController placeController = new PlaceController(eventBus);
-		return placeController;
-	}
-
-	@Provides
-	@Singleton
-	PlaceHistoryHandler provideHistoryHandler(//
-			com.google.web.bindery.event.shared.EventBus eventBus,//
-			PlaceHistoryMapper mapper,//
-			Place place,//
-			ActivityMapper activityMapper,//
-			PlaceController placeController) {
+		// 
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(mapper);
-		historyHandler.register(placeController, eventBus, place);
+		historyHandler.register(new PlaceController(eventBus), eventBus, place);
 		return historyHandler;
 	}
 

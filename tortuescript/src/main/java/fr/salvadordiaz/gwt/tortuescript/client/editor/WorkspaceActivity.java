@@ -19,7 +19,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -43,11 +42,11 @@ public class WorkspaceActivity extends AbstractActivity {
 	private String programName;
 
 	@Inject
-	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages, EventBus eventBus) {
+	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages) {
 		this.workspace = workspace;
 		this.localizedCommands = localizedCommands;
 		this.messages = messages;
-		bind(eventBus);
+		bind();
 	}
 
 	public void setPlace(Place place) {
@@ -64,7 +63,13 @@ public class WorkspaceActivity extends AbstractActivity {
 		panel.setWidget(workspace);
 	}
 
-	private void bind(EventBus eventBus) {
+	@Override
+	public String mayStop() {
+		System.out.println("Place change was requested, TODO: cancel if there are unsaved changes");
+		return null;
+	}
+	
+	private void bind() {
 		workspace.getExecuteButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -75,12 +80,6 @@ public class WorkspaceActivity extends AbstractActivity {
 			@Override
 			public void onClick(ClickEvent event) {
 				save();
-			}
-		});
-		eventBus.addHandler(PlaceChangeRequestEvent.TYPE, new PlaceChangeRequestEvent.Handler() {
-			@Override
-			public void onPlaceChangeRequest(PlaceChangeRequestEvent event) {
-				System.out.println("Place change was requested, TODO: cancel if there are unsaved changes");
 			}
 		});
 	}
