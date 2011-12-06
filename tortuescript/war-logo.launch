@@ -14,5 +14,5 @@
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="/home/salvador/workspace/sfeirlabs/tortugwt"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="/home/salvador/workspace/sfeirlabs/tortuescript"/>
 </launchConfiguration>
