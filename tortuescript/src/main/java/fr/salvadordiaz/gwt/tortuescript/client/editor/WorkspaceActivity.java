@@ -190,7 +190,7 @@ public class WorkspaceActivity extends AbstractActivity {
 						if (get(lineToRepeat, 0).equalsIgnoreCase(localizedCommands.repeatCommand())) {
 							unclosedRepeatCommands++;
 						}
-						if (size(lineToRepeat) >= 2// 
+						if (size(lineToRepeat) >= 2//
 								&& get(lineToRepeat, 0).equalsIgnoreCase(localizedCommands.endCommand())
 								&& get(lineToRepeat, 1).equalsIgnoreCase(localizedCommands.repeatCommand())) {
 							unclosedRepeatCommands--;
@@ -216,8 +216,8 @@ public class WorkspaceActivity extends AbstractActivity {
 						if (get(conditionedLine, 0).equalsIgnoreCase(localizedCommands.ifCommand())) {
 							unclosedIfs++;
 						}
-						if (size(conditionedLine) >= 2// 
-								&& get(conditionedLine, 0).equalsIgnoreCase(localizedCommands.endCommand())// 
+						if (size(conditionedLine) >= 2//
+								&& get(conditionedLine, 0).equalsIgnoreCase(localizedCommands.endCommand())//
 								&& get(conditionedLine, 1).equalsIgnoreCase(localizedCommands.ifCommand())) {
 							unclosedIfs--;
 							if (unclosedIfs == 0) {
@@ -238,7 +238,7 @@ public class WorkspaceActivity extends AbstractActivity {
 					ImmutableList.Builder<Iterable<String>> functionLines = ImmutableList.builder();
 					for (int functionLineIndex = lineIndex + 1; functionLineIndex < linesAsTokens.size(); functionLineIndex++) {
 						Iterable<String> functionLine = linesAsTokens.get(functionLineIndex);
-						if (size(functionLine) >= 2// 
+						if (size(functionLine) >= 2//
 								&& get(functionLine, 0).equalsIgnoreCase(localizedCommands.endCommand())//
 								&& get(functionLine, 1).equalsIgnoreCase(localizedCommands.toCommand())) {
 							endTagFound = true;

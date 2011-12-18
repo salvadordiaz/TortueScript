@@ -49,7 +49,7 @@ public class ApplicationModule extends AbstractGinModule {
 	com.google.web.bindery.event.shared.EventBus provideNewEventBus(EventBus eventBus){
 		return eventBus;
 	}
-	
+
 	@Provides
 	@Singleton
 	Place provideDefaultPlace() {

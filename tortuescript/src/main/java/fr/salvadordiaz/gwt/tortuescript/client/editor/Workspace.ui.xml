@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.canvas.client">
 	<ui:style src="Workspace.css" />
-		
+
 	<g:HTMLPanel styleName="{style.container}">
 		<div class="{style.editor} hero-unit">
 			<g:TextArea ui:field="textArea" styleName="{style.text}" />
@@ -13,4 +13,4 @@
 			<c:Canvas ui:field="canvas" styleName="{style.canvas} {style.center}" coordinateSpaceHeight="800" coordinateSpaceWidth="800" />
 		</div>
 	</g:HTMLPanel>
-</ui:UiBinder> 
+</ui:UiBinder>

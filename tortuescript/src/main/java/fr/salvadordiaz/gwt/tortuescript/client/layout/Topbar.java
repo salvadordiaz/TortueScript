@@ -16,9 +16,9 @@ public class Topbar extends Composite {
 
 	@UiField
 	UListElement navigationList;
-	
+
 	public Topbar() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+
 }
