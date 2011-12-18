@@ -4,7 +4,7 @@
 		body {
 			padding-top: 60px;
 		}
-	</ui:style>	
+	</ui:style>
 	<g:HTMLPanel styleName="topbar">
 		<div class="topbar-inner">
 			<div class="container-fluid">
@@ -20,4 +20,4 @@
 			</div>
 		</div>
 	</g:HTMLPanel>
-</ui:UiBinder> 
+</ui:UiBinder>

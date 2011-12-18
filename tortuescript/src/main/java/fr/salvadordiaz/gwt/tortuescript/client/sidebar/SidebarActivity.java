@@ -23,7 +23,7 @@ public class SidebarActivity extends AbstractActivity {
 		void clearUserItems();
 
 		void addItem(String key);
-		
+
 		HasClickHandlers getClearButton();
 	}
 
