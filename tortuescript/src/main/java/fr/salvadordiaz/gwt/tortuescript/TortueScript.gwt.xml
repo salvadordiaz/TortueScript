@@ -5,7 +5,8 @@
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.inject.Inject" />
 	<inherits name='com.google.gwt.activity.Activity' />
-
+	<inherits name="com.google.gwt.logging.Logging" />
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
 	<entry-point class='fr.salvadordiaz.gwt.tortuescript.client.TortueScript' />
 
 	<stylesheet src="/bootstrap-tortuescript.min.css" />
