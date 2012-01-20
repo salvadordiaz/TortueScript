@@ -2,7 +2,6 @@
 
 @external error;
 .container {
-	
 }
 
 .editor {
@@ -22,9 +21,10 @@
 }
 
 .text {
-	width: 100%;
+	width: 75%;
 	height: 150px;
 	margin-bottom: 10px;
+	margin-right: 10px;
 }
 
 .center {

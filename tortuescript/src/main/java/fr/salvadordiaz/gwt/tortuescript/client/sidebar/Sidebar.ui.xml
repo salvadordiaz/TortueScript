@@ -19,10 +19,6 @@
 				<li ui:field="defaultItem" />
 			</ul>
 			<h5>
-				<g:Anchor ui:field="syntaxLabel" href="javascript:void(0)" />
-			</h5>
-			<t:TortueScriptReference ui:field="syntaxPopup"/>
-			<h5>
 				<g:Anchor ui:field="clearProgramsLabel" href="javascript:void(0)" />
 			</h5>
 		</div>

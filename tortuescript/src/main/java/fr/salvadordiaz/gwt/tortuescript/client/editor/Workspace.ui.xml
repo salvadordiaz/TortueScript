@@ -5,9 +5,12 @@
 	<g:HTMLPanel styleName="{style.container}">
 		<div class="{style.editor} hero-unit">
 			<g:TextArea ui:field="textArea" styleName="{style.text}" />
-			<g:Button ui:field="executeButton" styleName="btn success" />
-			<g:Button ui:field="saveButton" styleName="btn" enabled="false"/>
-			<g:TextBox styleName="xlarge" ui:field="nameInput" visibleLength="30" />
+			<g:Button ui:field="syntaxButton" styleName="btn primary"/>
+			<div>
+				<g:Button ui:field="executeButton" styleName="btn success" />
+				<g:Button ui:field="saveButton" styleName="btn" enabled="false"/>
+				<g:TextBox styleName="xlarge" ui:field="nameInput" visibleLength="30" />
+			</div>
 		</div>
 		<div class="row">
 			<c:Canvas ui:field="canvas" styleName="{style.canvas} {style.center}" coordinateSpaceHeight="800" coordinateSpaceWidth="800" />

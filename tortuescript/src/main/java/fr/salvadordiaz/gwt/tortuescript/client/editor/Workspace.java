@@ -10,6 +10,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
@@ -21,11 +22,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import fr.salvadordiaz.gwt.tortuescript.client.Messages;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.TortueScriptReference;
 
 public class Workspace extends Composite implements WorkspaceDisplay {
 
@@ -44,6 +47,8 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	Canvas canvas;
 	@UiField
 	TextArea textArea;
+	@UiField
+	Button syntaxButton;
 	@UiField
 	Button executeButton;
 	@UiField
@@ -69,6 +74,8 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	private double currentY;
 	private double currentRadians;
 
+	private final TortueScriptReference syntaxPopup;
+
 	public Workspace() {
 		WorkspaceUiBinder uiBinder = GWT.create(WorkspaceUiBinder.class);
 		initWidget(uiBinder.createAndBindUi(this));
@@ -81,8 +88,24 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		messages = GWT.create(Messages.class);
 		executeButton.setText(messages.execute());
 		saveButton.setText(messages.save());
+		syntaxButton.setText(messages.showSyntax());
+		syntaxPopup = new TortueScriptReference(messages);
 		//set the initial position to the center of the canvas
 		home();
+	}
+
+	private final PositionCallback positionCallback = new PositionCallback() {
+		@Override
+		public void setPosition(int offsetWidth, int offsetHeight) {
+			final int left = syntaxButton.getAbsoluteLeft() + syntaxButton.getOffsetWidth() - offsetWidth;
+			final int top = syntaxButton.getAbsoluteTop() + syntaxButton.getOffsetHeight();
+			syntaxPopup.setPopupPosition(left, top);
+		}
+	};
+
+	@UiHandler("syntaxButton")
+	void showSyntax(ClickEvent event) {
+		syntaxPopup.setPopupPositionAndShow(positionCallback);
 	}
 
 	private Canvas getBufferCanvas() {
