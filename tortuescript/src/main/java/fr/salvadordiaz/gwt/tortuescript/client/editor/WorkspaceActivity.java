@@ -5,6 +5,7 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +14,13 @@ import javax.inject.Inject;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.DiscreteDomains;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Ranges;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -68,7 +74,7 @@ public class WorkspaceActivity extends AbstractActivity {
 		System.out.println("Place change was requested, TODO: cancel if there are unsaved changes");
 		return null;
 	}
-	
+
 	private void bind() {
 		workspace.getExecuteButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -95,7 +101,17 @@ public class WorkspaceActivity extends AbstractActivity {
 	private void execute() {
 		final List<String> lines = ImmutableList.copyOf(lineSplitter.split(workspace.getCodeEditor().getText()));
 		final List<Iterable<String>> lineTokens = transform(lines, splitTokens);
-		interpret(lineTokens);
+		final Iterator<ScheduledCommand> commands = interpret(lineTokens).iterator();
+		Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
+			@Override
+			public boolean execute() {
+				if (commands.hasNext()) {
+					commands.next().execute();
+					return commands.hasNext();
+				}
+				return false;
+			}
+		}, 20);
 	}
 
 	private final Function<String, Iterable<String>> splitTokens = new Function<String, Iterable<String>>() {
@@ -105,7 +121,8 @@ public class WorkspaceActivity extends AbstractActivity {
 		}
 	};
 
-	private void interpret(List<Iterable<String>> linesAsTokens) {
+	private List<ScheduledCommand> interpret(List<Iterable<String>> linesAsTokens) {
+		final ImmutableList.Builder<ScheduledCommand> result = ImmutableList.builder();
 		for (int lineIndex = 0; lineIndex < linesAsTokens.size(); lineIndex++) {
 			Iterable<String> lineTokens = linesAsTokens.get(lineIndex);
 			String command = getFirst(lineTokens, "");
@@ -113,13 +130,13 @@ public class WorkspaceActivity extends AbstractActivity {
 				if (command.startsWith(";")) {
 					// Comment, do nothing
 				} else if (command.equalsIgnoreCase(localizedCommands.forwardCommand())) {
-					workspace.forward(getValue(getLast(lineTokens)));
+					result.addAll(createMoveCommands(getValue(getLast(lineTokens))));
 				} else if (command.equalsIgnoreCase(localizedCommands.backwardCommand())) {
-					workspace.backward(getValue(getLast(lineTokens)));
+					result.addAll(createMoveCommands(-1 * getValue(getLast(lineTokens))));
 				} else if (command.equalsIgnoreCase(localizedCommands.leftCommand())) {
-					workspace.left(getValue(getLast(lineTokens)));
+					workspace.turn(-1 * getValue(getLast(lineTokens)));
 				} else if (command.equalsIgnoreCase(localizedCommands.rightCommand())) {
-					workspace.right(getValue(getLast(lineTokens)));
+					workspace.turn((getValue(getLast(lineTokens))));
 				} else if (command.equalsIgnoreCase(localizedCommands.setXCommand())) {
 					workspace.setX(getValue(getLast(lineTokens)));
 				} else if (command.equalsIgnoreCase(localizedCommands.setYCommand())) {
@@ -138,7 +155,7 @@ public class WorkspaceActivity extends AbstractActivity {
 						int green = getValue(get(lineTokens, 2)).intValue();
 						int blue = getValue(get(lineTokens, 3)).intValue();
 						int alpha = getValue(get(lineTokens, 4)).intValue();
-						workspace.penColor(red, green, blue, alpha);
+						workspace.penColor(rgbaString(red, green, blue, alpha));
 					}
 				} else if (command.equalsIgnoreCase(localizedCommands.canvasColorCommand())) {
 					if (size(lineTokens) == 2) {
@@ -148,7 +165,7 @@ public class WorkspaceActivity extends AbstractActivity {
 						int green = getValue(get(lineTokens, 2)).intValue();
 						int blue = getValue(get(lineTokens, 3)).intValue();
 						int alpha = getValue(get(lineTokens, 4)).intValue();
-						workspace.canvasColor(red, green, blue, alpha);
+						workspace.canvasColor(rgbaString(red, green, blue, alpha));
 					}
 				} else if (command.equalsIgnoreCase(localizedCommands.drawStringCommand())) {
 					workspace.drawString(stringJoiner.join(skip(lineTokens, 1)));
@@ -205,7 +222,7 @@ public class WorkspaceActivity extends AbstractActivity {
 					}
 					int repeats = getValue(getLast(lineTokens)).intValue();
 					for (int i = 0; i < repeats; i++) {
-						interpret(linesToRepeat.build());
+						result.addAll(interpret(linesToRepeat.build()));
 					}
 				} else if (command.equalsIgnoreCase(localizedCommands.ifCommand())) {
 					int unclosedIfs = 1;
@@ -230,12 +247,13 @@ public class WorkspaceActivity extends AbstractActivity {
 						throw new IllegalStateException(messages.unclosedIfStatement(lineIndex));
 					}
 					if (isConditionTrue(get(lineTokens, 2), getValue(get(lineTokens, 1)), getValue(get(lineTokens, 3)), lineIndex)) {
-						interpret(conditionedLines.build());
+						result.addAll(interpret(conditionedLines.build()));
 					}
 				} else if (command.equalsIgnoreCase(localizedCommands.toCommand())) {
 					boolean endTagFound = false;
 					ImmutableList.Builder<Iterable<String>> functionLines = ImmutableList.builder();
-					for (int functionLineIndex = lineIndex + 1; functionLineIndex < linesAsTokens.size(); functionLineIndex++) {
+					int functionLineIndex = lineIndex + 1;
+					for (; functionLineIndex < linesAsTokens.size(); functionLineIndex++) {
 						Iterable<String> functionLine = linesAsTokens.get(functionLineIndex);
 						if (size(functionLine) >= 2// 
 								&& get(functionLine, 0).equalsIgnoreCase(localizedCommands.endCommand())//
@@ -249,15 +267,17 @@ public class WorkspaceActivity extends AbstractActivity {
 						throw new IllegalStateException(messages.unclosedFunctionStatement(lineIndex));
 					}
 					functions.put(get(lineTokens, 1).toLowerCase(), functionLines.build());
+					lineIndex = functionLineIndex;
 				} else {
 					if (functions.containsKey(command.toLowerCase())) {
-						interpret(functions.get(command.toLowerCase()));
+						result.addAll(interpret(functions.get(command.toLowerCase())));
 					} else {
 						throw new IllegalStateException(messages.unrecognizedStatement(lineIndex));
 					}
 				}
 			}
 		}
+		return result.build();
 	}
 
 	private Double getValue(String token) {
@@ -301,4 +321,28 @@ public class WorkspaceActivity extends AbstractActivity {
 		throw new IllegalStateException(messages.unrecognizedIfOperator(operator, lineIndex));
 	}
 
+	private String rgbaString(int r, int g, int b, int a) {
+		return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+	}
+
+	private List<ScheduledCommand> createMoveCommands(final double length) {
+		if (Math.abs(length) < 1) {
+			return ImmutableList.<ScheduledCommand> of();
+		}
+		final double currentAngle = workspace.getCurrentAngle();
+		final ScheduledCommand command = new ScheduledCommand() {
+			@Override
+			public void execute() {
+				workspace.updatePosition(length > 0 ? 1.0 : -1.0, currentAngle);
+			}
+		};
+		final Function<Integer, ScheduledCommand> function = new Function<Integer, ScheduledCommand>() {
+			@Override
+			public ScheduledCommand apply(Integer input) {
+				return command;
+			}
+		};
+		final List<Integer> range = Ranges.closed(1, (int) length).asSet(DiscreteDomains.integers()).asList();
+		return transform(range, function);
+	}
 }

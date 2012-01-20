@@ -26,21 +26,9 @@ public interface WorkspaceDisplay extends IsWidget {
 
 	void setY(double newY);
 
-	void forward(double height);
-
-	void backward(double height);
-
-	void left(double angle);
-
-	void right(double angle);
-
 	void penColor(String stringColor);
 
-	void penColor(int red, int green, int blue, int alpha);
-
 	void canvasColor(String stringColor);
-
-	void canvasColor(int red, int green, int blue, int alpha);
 
 	void drawString(String string);
 
@@ -50,4 +38,9 @@ public interface WorkspaceDisplay extends IsWidget {
 
 	void fontName(String fontName);
 
+	void turn(double value);
+
+	double getCurrentAngle();
+
+	void updatePosition(double i, double currentAngle);
 }

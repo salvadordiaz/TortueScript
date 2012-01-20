@@ -9,7 +9,6 @@ import fr.salvadordiaz.gwt.tortuescript.client.layout.Topbar;
 
 public class TortueScript implements EntryPoint {
 
-
 	public void onModuleLoad() {
 		ApplicationGinjector ginjector = GWT.create(ApplicationGinjector.class);
 		RootPanel.get().add(new Topbar());

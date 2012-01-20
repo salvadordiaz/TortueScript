@@ -67,7 +67,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	private boolean penDown = true;
 	private double currentX;
 	private double currentY;
-	private double currentAngle;
+	private double currentRadians;
 
 	public Workspace() {
 		WorkspaceUiBinder uiBinder = GWT.create(WorkspaceUiBinder.class);
@@ -111,34 +111,6 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		saveButton.setEnabled(true);
 	}
 
-	private void updatePosition(double length, boolean forward) {
-		GWT.log("Going " + length + " pixels " + (forward ? "fwd":"bwd"));
-		double direction = forward ? 1.0 : -1.0;
-		double newX = currentX + direction * length * Math.cos(currentAngle);
-		double newY = currentY + length * Math.sin(currentAngle);
-		if (penDown) {
-			lineContext.beginPath();
-			lineContext.setLineWidth(PEN_WIDTH);
-			lineContext.moveTo(currentX, currentY);
-			lineContext.lineTo(newX, newY);
-			lineContext.closePath();
-			lineContext.stroke();
-		}
-		this.currentX = newX;
-		this.currentY = newY;
-		updateCanvas();
-	}
-
-	private void updateCanvas(){
-		frontContext.clearRect(0, 0, canvasWidth, canvasHeight);
-		frontContext.drawImage(lineContext.getCanvas(), 0, 0);
-		frontContext.save();
-		frontContext.translate(currentX, currentY);
-		frontContext.rotate(currentAngle);
-		frontContext.drawImage(tortueElement, -12, -10);
-		frontContext.restore();
-	}
-	
 	@Override
 	public HasClickHandlers getExecuteButton() {
 		return executeButton;
@@ -157,6 +129,39 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	@Override
 	public HasText getNameEditor() {
 		return nameInput;
+	}
+
+	private void updateCanvas(double radians) {
+		frontContext.clearRect(0, 0, canvasWidth, canvasHeight);
+		frontContext.drawImage(lineContext.getCanvas(), 0, 0);
+		frontContext.save();
+		frontContext.translate(currentX, currentY);
+		frontContext.rotate(radians);
+		frontContext.drawImage(tortueElement, -12, -10);
+		frontContext.restore();
+	}
+
+	@Override
+	public void updatePosition(double length, double radians) {
+		double newX = currentX + length * Math.cos(radians);
+		double newY = currentY + length * Math.sin(radians);
+		if (penDown) {
+			lineContext.beginPath();
+			lineContext.setLineWidth(PEN_WIDTH);
+			lineContext.moveTo(currentX, currentY);
+			lineContext.lineTo(newX, newY);
+			lineContext.closePath();
+			lineContext.stroke();
+		}
+		this.currentX = newX;
+		this.currentY = newY;
+		updateCanvas(radians);
+	}
+
+	@Override
+	public void turn(double degrees) {
+		currentRadians = currentRadians + Math.PI * degrees / 180;
+		updateCanvas(currentRadians);
 	}
 
 	@Override
@@ -180,34 +185,12 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	}
 
 	@Override
-	public void forward(final double length) {
-		updatePosition(length, true);
-	}
-
-	@Override
-	public void backward(final double length) {
-		updatePosition(length, false);
-	}
-
-	@Override
-	public void left(double angle) {
-		currentAngle -= Math.PI * angle / 180.0;
-		updateCanvas();
-	}
-
-	@Override
-	public void right(double angle) {
-		currentAngle += Math.PI * angle / 180.0;
-		updateCanvas();
-	}
-
-	@Override
 	public void home() {
 		this.currentX = canvas.getCoordinateSpaceWidth() / 2;
 		this.currentY = canvas.getCoordinateSpaceHeight() / 2;
-		this.currentAngle = 0;
+		this.currentRadians = 0;
 		lineContext.moveTo(currentX, currentY);
-		updatePosition(0, true);
+		updatePosition(0, currentRadians);
 	}
 
 	@Override
@@ -223,26 +206,15 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	}
 
 	@Override
-	public void penColor(int red, int green, int blue, int alpha) {
-		lineContext.save();
-		lineContext.setStrokeStyle(CssColor.make("rgba(" + red + "," + green + "," + blue + "," + alpha + ")"));
-	}
-
-	@Override
 	public void canvasColor(String stringColor) {
-		//TODO: is it possible ?
-	}
-
-	@Override
-	public void canvasColor(int red, int green, int blue, int alpha) {
-		//TODO: is it possible ?
+		canvas.getElement().getStyle().setBackgroundColor(stringColor);
 	}
 
 	@Override
 	public void drawString(String string) {
 		lineContext.save();
 		lineContext.translate(currentX, currentY);
-		lineContext.rotate(currentAngle);
+		lineContext.rotate(currentRadians);
 		lineContext.strokeText(string, 0, 0);
 		lineContext.restore();
 		//FIXME: are the transformations used correctly ?
@@ -269,5 +241,10 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	public void fontName(String fontName) {
 		this.fontName = fontName;
 		updateFont();
+	}
+
+	@Override
+	public double getCurrentAngle() {
+		return currentRadians;
 	}
 }
