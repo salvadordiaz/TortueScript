@@ -6,8 +6,11 @@
 	<inherits name="com.google.gwt.inject.Inject" />
 	<inherits name='com.google.gwt.activity.Activity' />
 	<inherits name="com.google.gwt.logging.Logging" />
-	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+	
 	<entry-point class='fr.salvadordiaz.gwt.tortuescript.client.TortueScript' />
 
 	<set-property name="user.agent" value="safari,gecko1_8" />
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+
+	<extend-property name="locale" values="fr"/>
 </module>

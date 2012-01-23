@@ -1,7 +1,9 @@
-package fr.salvadordiaz.gwt.tortuescript.client;
+package fr.salvadordiaz.gwt.tortuescript.client.i18n;
 
 import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.i18n.client.LocalizableResource.Generate;
 
+@Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface LocalizedCommands extends Constants {
 
 	@DefaultStringValue("pendown")

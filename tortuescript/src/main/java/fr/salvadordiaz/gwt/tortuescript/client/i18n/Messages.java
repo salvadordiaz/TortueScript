@@ -1,5 +1,8 @@
-package fr.salvadordiaz.gwt.tortuescript.client;
+package fr.salvadordiaz.gwt.tortuescript.client.i18n;
 
+import com.google.gwt.i18n.client.LocalizableResource.Generate;
+
+@Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	/*Sidebar*/
@@ -16,11 +19,6 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("Delete all saved drawings")
 	String clearSavedItems();
 
-	@DefaultMessage("Show syntax")
-	String showSyntax();
-
-	@DefaultMessage("Hide syntax")
-	String hideSyntax();
 
 	@DefaultMessage("TortueScript reference syntax")
 	String syntaxTitle();
@@ -32,6 +30,12 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Save program as : ")
 	String save();
+
+	@DefaultMessage("Show syntax")
+	String showSyntax();
+	
+	@DefaultMessage("Example")
+	String example();
 
 	/*Errors*/
 

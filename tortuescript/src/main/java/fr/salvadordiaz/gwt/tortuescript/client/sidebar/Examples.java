@@ -2,7 +2,7 @@ package fr.salvadordiaz.gwt.tortuescript.client.sidebar;
 
 import com.google.common.base.Joiner;
 
-import fr.salvadordiaz.gwt.tortuescript.client.LocalizedCommands;
+import fr.salvadordiaz.gwt.tortuescript.client.i18n.LocalizedCommands;
 
 public class Examples {
 

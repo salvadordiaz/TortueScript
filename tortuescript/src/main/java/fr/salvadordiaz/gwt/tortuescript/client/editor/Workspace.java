@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import fr.salvadordiaz.gwt.tortuescript.client.Messages;
+import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.TortueScriptReference;
 
 public class Workspace extends Composite implements WorkspaceDisplay {
@@ -74,7 +74,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	private double currentY;
 	private double currentRadians;
 
-	private final TortueScriptReference syntaxPopup;
+	private final TortueScriptReference syntaxPopup = new TortueScriptReference();
 
 	public Workspace() {
 		WorkspaceUiBinder uiBinder = GWT.create(WorkspaceUiBinder.class);
@@ -89,7 +89,6 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		executeButton.setText(messages.execute());
 		saveButton.setText(messages.save());
 		syntaxButton.setText(messages.showSyntax());
-		syntaxPopup = new TortueScriptReference(messages);
 		//set the initial position to the center of the canvas
 		home();
 	}

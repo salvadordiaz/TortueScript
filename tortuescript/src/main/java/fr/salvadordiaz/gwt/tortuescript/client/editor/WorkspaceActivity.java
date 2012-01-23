@@ -29,8 +29,8 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import fr.salvadordiaz.gwt.tortuescript.client.LocalizedCommands;
-import fr.salvadordiaz.gwt.tortuescript.client.Messages;
+import fr.salvadordiaz.gwt.tortuescript.client.i18n.LocalizedCommands;
+import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
 
 public class WorkspaceActivity extends AbstractActivity {
 

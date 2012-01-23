@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-import fr.salvadordiaz.gwt.tortuescript.client.Messages;
+import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay;
 
 public class Sidebar extends Composite implements SidebarDisplay {
