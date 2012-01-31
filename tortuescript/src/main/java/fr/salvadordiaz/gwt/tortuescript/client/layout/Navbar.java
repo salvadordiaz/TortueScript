@@ -7,17 +7,17 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Topbar extends Composite {
+public class Navbar extends Composite {
 
 	private static TopbarUiBinder uiBinder = GWT.create(TopbarUiBinder.class);
 
-	interface TopbarUiBinder extends UiBinder<Widget, Topbar> {
+	interface TopbarUiBinder extends UiBinder<Widget, Navbar> {
 	}
 
 	@UiField
 	UListElement navigationList;
 	
-	public Topbar() {
+	public Navbar() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	

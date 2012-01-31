@@ -5,13 +5,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import fr.salvadordiaz.gwt.tortuescript.client.app.ApplicationGinjector;
-import fr.salvadordiaz.gwt.tortuescript.client.layout.Topbar;
+import fr.salvadordiaz.gwt.tortuescript.client.layout.Navbar;
 
 public class TortueScript implements EntryPoint {
 
 	public void onModuleLoad() {
 		ApplicationGinjector ginjector = GWT.create(ApplicationGinjector.class);
-		RootPanel.get().add(new Topbar());
+		RootPanel.get().add(new Navbar());
 		RootPanel.get().add(ginjector.display());
 		ginjector.getHistoryHandler().handleCurrentHistory();
 	}

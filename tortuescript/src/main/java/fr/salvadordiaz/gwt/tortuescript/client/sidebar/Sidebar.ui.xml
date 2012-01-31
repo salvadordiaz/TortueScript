@@ -1,26 +1,30 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:t="urn:import:fr.salvadordiaz.gwt.tortuescript.client.sidebar">
-	<g:HTMLPanel>
-		<div class="well">
-			<h5 ui:field="examplesHeader" />
-			<ul>
-				<li>
-					<a href="#editor:Box">Box</a>
-				</li>
-				<li>
-					<a href="#editor:Flower">Flower</a>
-				</li>
-				<li>
-					<a href="#editor:OtherFlower">Other Flower</a>
-				</li>
-			</ul>
-			<h5 ui:field="savedItemsHeader" />
-			<ul ui:field="savedItems">
-				<li ui:field="defaultItem" />
-			</ul>
-			<h5>
-				<g:Anchor ui:field="clearProgramsLabel" href="javascript:void(0)" />
-			</h5>
-		</div>
+	<g:HTMLPanel styleName="well sidebar-nav">
+		<ul class="nav nav-list">
+			<li class="nav-header" ui:field="examplesHeader" />
+			<li>
+				<a href="#editor:Box">Box</a>
+			</li>
+			<li>
+				<a href="#editor:Flower">Flower</a>
+			</li>
+			<li>
+				<a href="#editor:OtherFlower">Other Flower</a>
+			</li>
+		</ul>
+		<br/>
+		<ul class="nav nav-list" ui:field="savedItems">
+			<li class="nav-header" ui:field="savedItemsHeader" />
+			<li ui:field="defaultItem" />
+		</ul>
+		<br/>
+		<h5>
+			<g:Anchor ui:field="clearProgramsLabel" href="javascript:void(0)" />
+		</h5>
+		<br/>
+		<h5>
+			<g:Anchor ui:field="loadProgramsLabel" href="#search:" />
+		</h5>
 	</g:HTMLPanel>
 </ui:UiBinder> 

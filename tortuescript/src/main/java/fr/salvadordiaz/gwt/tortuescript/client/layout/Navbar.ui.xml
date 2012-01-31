@@ -4,9 +4,9 @@
 		body {
 			padding-top: 60px;
 		}
-	</ui:style>	
-	<g:HTMLPanel styleName="topbar">
-		<div class="topbar-inner">
+	</ui:style>
+	<g:HTMLPanel styleName="navbar navbar-fixed-top">
+		<div class="navbar-inner">
 			<div class="container-fluid">
 				<a class="brand" href="#">TortueScript</a>
 				<ul class="nav" ui:field="navigationList">
@@ -14,9 +14,11 @@
 						<a href="#editor:">Editor</a>
 					</li>
 				</ul>
-				<p class="pull-right">
-					<a href="https://github.com/salvadordiaz/tortuescript" target="blank">About</a>
-				</p>
+				<ul class="nav pull-right">
+					<li>
+						<a href="https://github.com/salvadordiaz/tortuescript" target="blank">About</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</g:HTMLPanel>

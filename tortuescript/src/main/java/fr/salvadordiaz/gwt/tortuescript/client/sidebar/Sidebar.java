@@ -9,7 +9,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -33,11 +32,13 @@ public class Sidebar extends Composite implements SidebarDisplay {
 	@UiField
 	Element savedItemsHeader;
 	@UiField
-	UListElement savedItems;
+	Element savedItems;
 	@UiField
-	LIElement defaultItem;
+	Element defaultItem;
 	@UiField
 	Anchor clearProgramsLabel;
+	@UiField
+	Anchor loadProgramsLabel;
 
 	@Inject
 	public Sidebar(Messages messages) {
@@ -46,6 +47,7 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		savedItemsHeader.setInnerText(messages.savedItems());
 		defaultItem.setInnerText(messages.noSavedItems());
 		clearProgramsLabel.setText(messages.clearSavedItems());
+		loadProgramsLabel.setText(messages.loadPrograms());
 	}
 
 	@Override
@@ -54,6 +56,7 @@ public class Sidebar extends Composite implements SidebarDisplay {
 		for (int childIndex = 0; childIndex < childNodes.getLength(); childIndex++) {
 			savedItems.removeChild(savedItems.getChild(childIndex));
 		}
+		savedItems.appendChild(savedItemsHeader);
 	}
 
 	@Override
@@ -72,5 +75,10 @@ public class Sidebar extends Composite implements SidebarDisplay {
 	@Override
 	public HasClickHandlers getClearButton() {
 		return clearProgramsLabel;
+	}
+
+	@Override
+	public HasClickHandlers getLoadProgramsButton() {
+		return loadProgramsLabel;
 	}
 }

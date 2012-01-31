@@ -1,7 +1,5 @@
 package fr.salvadordiaz.gwt.tortuescript.client.editor;
 
-import static com.google.common.base.Strings.*;
-
 import com.google.common.base.Joiner;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -11,7 +9,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
@@ -121,16 +118,13 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 
 	@UiHandler("nameInput")
 	void errorIfEmptyName(BlurEvent event) {
-		if (nullToEmpty(nameInput.getText()).trim().isEmpty()) {
+		if (nameInput.getValue().trim().isEmpty()) {
 			nameInput.addStyleName(ERROR_STYLE);
 			saveButton.setEnabled(false);
+		} else {
+			nameInput.removeStyleName(ERROR_STYLE);
+			saveButton.setEnabled(true);
 		}
-	}
-
-	@UiHandler("nameInput")
-	void clearErrorOnFocus(FocusEvent event) {
-		nameInput.removeStyleName(ERROR_STYLE);
-		saveButton.setEnabled(true);
 	}
 
 	@Override
