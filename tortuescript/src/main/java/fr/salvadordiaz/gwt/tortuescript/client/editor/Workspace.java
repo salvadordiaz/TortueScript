@@ -93,7 +93,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	private final PositionCallback positionCallback = new PositionCallback() {
 		@Override
 		public void setPosition(int offsetWidth, int offsetHeight) {
-			final int left = syntaxButton.getAbsoluteLeft() + syntaxButton.getOffsetWidth() - offsetWidth;
+			final int left = syntaxButton.getAbsoluteLeft();
 			final int top = syntaxButton.getAbsoluteTop() + syntaxButton.getOffsetHeight();
 			syntaxPopup.setPopupPosition(left, top);
 		}

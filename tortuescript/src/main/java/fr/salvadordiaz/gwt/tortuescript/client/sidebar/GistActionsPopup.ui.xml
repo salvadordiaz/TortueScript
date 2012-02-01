@@ -1,0 +1,52 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style field="s">
+		@external gwt-PopupPanel, right, popover-content, close;
+		.gwt-PopupPanel .close,.gwt-PopupPanel .popover-content button {
+			margin-left: 5px;
+		}
+		
+		.gwt-PopupPanel .right {
+			margin-left: 0px;
+		}
+		
+		.gwt-PopupPanel .popover-content h2 {
+			border-bottom: 1px solid #EEE;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="popover right fade" ui:field="container">
+		<div class="arrow"></div>
+		<div class="popover-inner">
+			<h3 class="popover-title">
+				<g:Anchor href="javascript:void(0)" ui:field="closeButton" styleName="close">&times;</g:Anchor>
+				<span ui:field="title" />
+			</h3>
+			<div class="popover-content">
+				<h2>
+					<g:Button styleName="btn btn-danger pull-right" ui:field="deleteButton" />
+					<g:Anchor ui:field="executeLink" />
+				</h2>
+				<g:HTMLPanel ui:field="infoPanel">
+					<br />
+					<div ui:field="authorLabel" />
+					<g:Anchor ui:field="gistLink" target="_blank" />
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="sharePanel" styleName="form-horizontal">
+					<fieldset>
+						<legend ui:field="shareLegend" />
+						<g:HTMLPanel styleName="control-group" ui:field="emailPanel">
+							<label class="control-label" ui:field="mailLabel" />
+							<div class="controls">
+								<g:TextBox ui:field="mailTextBox" styleName="input-xlarge" />
+								<p class="help-block" ui:field="helpLabel" />
+							</div>
+						</g:HTMLPanel>
+						<div class="pull-right">
+							<g:Button styleName="btn btn-primary" ui:field="shareButton" />
+						</div>
+					</fieldset>
+				</g:HTMLPanel>
+			</div>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

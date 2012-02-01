@@ -5,7 +5,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import fr.salvadordiaz.gwt.tortuescript.client.app.ApplicationGinjector;
-import fr.salvadordiaz.gwt.tortuescript.client.layout.Navbar;
 
 public class TortueScript implements EntryPoint {
 

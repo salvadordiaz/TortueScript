@@ -1,14 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:t="urn:import:fr.salvadordiaz.gwt.tortuescript.client.sidebar">
-	<g:HTMLPanel styleName="well sidebar-nav">
-		<ul class="nav nav-list" ui:field="savedItems">
+	<ui:style field="ids" type="fr.salvadordiaz.gwt.tortuescript.client.sidebar.Sidebar.Ids">
+		.id {
+			/*fake style, unique classname used as an id*/
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="well sidebar-nav" ui:field="container">
+		<ul class="nav nav-list" id="{ids.id}">
 			<li class="nav-header" ui:field="savedItemsHeader" />
 		</ul>
-		<br/>
-		<h5>
-			<g:Anchor ui:field="clearProgramsLabel" href="javascript:void(0)" />
-		</h5>
-		<br/>
+		<br />
+		<br />
 		<h5>
 			<g:Anchor ui:field="loadProgramsLabel" href="#search:" />
 		</h5>

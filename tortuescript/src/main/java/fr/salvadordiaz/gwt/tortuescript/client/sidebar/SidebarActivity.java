@@ -1,7 +1,5 @@
 package fr.salvadordiaz.gwt.tortuescript.client.sidebar;
 
-import static com.google.common.base.Strings.*;
-
 import javax.inject.Inject;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -14,13 +12,10 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.storage.client.StorageEvent;
-import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HasValue;
@@ -30,59 +25,49 @@ import fr.salvadordiaz.gwt.tortuescript.client.i18n.LocalizedCommands;
 import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
 import fr.salvadordiaz.gwt.tortuescript.client.model.JsonGist;
 import fr.salvadordiaz.gwt.tortuescript.client.model.ProgramStorage;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay.GistActionsDisplay;
 
 public class SidebarActivity extends AbstractActivity {
 
 	public interface SidebarDisplay extends IsWidget {
 		void clearUserItems();
 
-		void addItem(String key);
-
-		HasClickHandlers getClearButton();
+		void addItem(JsonGist gist);
 
 		HasClickHandlers getLoadProgramsButton();
+
+		GistActionsDisplay getActionsDisplay();
+
+		public interface GistActionsDisplay extends TakesValue<JsonGist> {
+			HasClickHandlers getDeleteButton();
+
+			HasClickHandlers getShareButton();
+
+			HasValue<String> getEmailBox();
+		}
 	}
-
-	public interface EmailPromptDisplay {
-		HasClickHandlers getSaveButton();
-
-		HasValue<String> getTextbox();
-
-		void center();
-	}
-
-	private static final String EMAIL = "email";
 
 	private final RequestBuilder shareGistBuilder = new RequestBuilder(RequestBuilder.POST, "https://api.github.com/gists");
 	private final RequestBuilder getGistsBuilder = new RequestBuilder(RequestBuilder.GET, "https://api.github.com/users/tortuescript/gists");
 
 	private final SidebarDisplay sidebarDisplay;
-	private final EmailPromptDisplay emailPromptDisplay;
+	private final GistActionsDisplay gistActionsDisplay;
 	private final LocalizedCommands commands;
 	private final Messages messages;
-	private final Storage storage;
 	private final ProgramStorage programStorage;
 
-	private Command awaitingCommand;
-
 	@Inject
-	public SidebarActivity(SidebarDisplay sidebarDisplay, EmailPromptDisplay emailPromptDisplay, LocalizedCommands commands, Messages messages, ProgramStorage programStorage) {
+	public SidebarActivity(SidebarDisplay sidebarDisplay, LocalizedCommands commands, Messages messages, ProgramStorage programStorage) {
 		this.sidebarDisplay = sidebarDisplay;
-		this.emailPromptDisplay = emailPromptDisplay;
+		this.gistActionsDisplay = sidebarDisplay.getActionsDisplay();
 		this.commands = commands;
 		this.messages = messages;
-		this.storage = Storage.getLocalStorageIfSupported();
 		this.programStorage = programStorage;
 		shareGistBuilder.setHeader("Authorization", "Basic " + encode(""));
 		shareGistBuilder.setHeader("Content-Type", "text/plain");
-		init();
 	}
 
-	private void init() {
-		if (programStorage.getSavedPrograms().length() == 0) {
-			loadStaticExamples();
-		}
-		displaySavedPrograms();
+	private void bind() {
 		Storage.addStorageEventHandler(new StorageEvent.Handler() {
 			@Override
 			public void onStorageChange(StorageEvent event) {
@@ -90,55 +75,52 @@ public class SidebarActivity extends AbstractActivity {
 				displaySavedPrograms();
 			}
 		});
-		sidebarDisplay.getClearButton().addClickHandler(new ClickHandler() {
+		gistActionsDisplay.getShareButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				storage.clear();
-				loadStaticExamples();
+				programStorage.setEmail(gistActionsDisplay.getEmailBox().getValue());
+				shareAndSave(gistActionsDisplay.getValue());
 			}
 		});
-		emailPromptDisplay.getSaveButton().addClickHandler(new ClickHandler() {
+		gistActionsDisplay.getDeleteButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				storage.setItem(EMAIL, emailPromptDisplay.getTextbox().getValue());
-				if (awaitingCommand != null) {
-					awaitingCommand.execute();
-				}
+				programStorage.delete(gistActionsDisplay.getValue());
 			}
 		});
 	}
 
 	private void loadStaticExamples() {
 		Examples examples = new Examples(commands);
-		programStorage.saveProgram(JsonGist.create(messages.boxExample(), examples.getBox()));
-		programStorage.saveProgram(JsonGist.create(messages.flowerExample(), examples.getFlower()));
-		programStorage.saveProgram(JsonGist.create(messages.bigFlowerExample(), examples.getOtherFlower()));
+		programStorage.saveProgram(JsonGist.createExample(messages.boxExample(), examples.getBox()));
+		programStorage.saveProgram(JsonGist.createExample(messages.flowerExample(), examples.getFlower()));
+		programStorage.saveProgram(JsonGist.createExample(messages.bigFlowerExample(), examples.getOtherFlower()));
 	}
 
 	private void displaySavedPrograms() {
 		for (JsonGist gist : programStorage.getSavedPrograms().asIterable()) {
-			sidebarDisplay.addItem(gist.getFile().getFilename());
+			sidebarDisplay.addItem(gist);
 		}
 	}
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		panel.setWidget(sidebarDisplay);
+		if (programStorage.getSavedPrograms().length() == 0) {
+			loadStaticExamples();
+		}
+		displaySavedPrograms();
+		gistActionsDisplay.getEmailBox().setValue(programStorage.getEmail());
+		bind();
 	}
 
-	private void save(String programKey) {
-		final String username = nullToEmpty(storage.getItem(EMAIL));
-		if (username.isEmpty()) {
-			awaitingCommand = createAwaitingSaveCommand(programKey);
-			emailPromptDisplay.center();
-			return;
-		}
-
+	private void shareAndSave(JsonGist gist) {
 		try {
-			shareGistBuilder.sendRequest(getGist(programKey, username).toString(), new RequestCallback() {
+			shareGistBuilder.sendRequest(new JSONObject(gist).toString(), new RequestCallback() {
 				@Override
 				public void onResponseReceived(Request request, Response response) {
 					Window.alert(messages.programWasShared());
+					programStorage.parseAndSave(response.getText());
 				}
 
 				@Override
@@ -150,33 +132,6 @@ public class SidebarActivity extends AbstractActivity {
 			//motherfucking checked exception
 			Window.alert(messages.sharingError());
 		}
-	}
-
-	private Command createAwaitingSaveCommand(final String key) {
-		return new Command() {
-			@Override
-			public void execute() {
-				save(key);
-			}
-		};
-	}
-
-	private JSONObject getGist(String key, String username) {
-		final JSONObject content = new JSONObject();
-		content.put("content", new JSONString(storage.getItem(key)));
-		final JSONObject file = new JSONObject();
-		file.put(key + ".logo", content);
-		final JSONObject gist = new JSONObject();
-		final String description = getDescription(username);
-		gist.put("description", new JSONString(description));
-		gist.put("public", JSONBoolean.getInstance(true));
-		gist.put("files", file);
-		return gist;
-	}
-
-	private String getDescription(String user) {
-		return new StringBuilder("{ \"locale\" : \"").append(LocaleInfo.getCurrentLocale().getLocaleName()).append("\", \"user\":\"").append(user)
-				.append("\"}").toString();
 	}
 
 	private native String encode(String text)/*-{

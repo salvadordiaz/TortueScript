@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
+		@external page-header, nav;
 		.container {
 			width: 600px;
 		}
@@ -11,18 +12,18 @@
 			padding: 0 5px;
 		}
 		
-		@external page-header, nav;
 		.tab .page-header {
 			text-transform: uppercase;
 			padding-bottom: 0px;
 		}
+		
 		.container .nav {
 			margin-bottom: 0px;
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="modal {style.container}">
 		<div class="modal-header">
-			<g:Button ui:field="closeButton" styleName="close">&times;</g:Button>
+			<g:Anchor ui:field="closeButton" styleName="close">&times;</g:Anchor>
 			<h3 ui:field="syntaxTitle" />
 		</div>
 		<div class="modal-body">
@@ -30,16 +31,16 @@
 			:
 			<ul class="nav nav-tabs">
 				<li class="active">
-					<g:Anchor ui:field="movementsTab" href="javascript:void(0)"/>
+					<g:Anchor ui:field="movementsTab" href="javascript:void(0)" />
 				</li>
 				<li>
-					<g:Anchor ui:field="penTab" href="javascript:void(0)"/>
+					<g:Anchor ui:field="penTab" href="javascript:void(0)" />
 				</li>
 				<li>
-					<g:Anchor ui:field="mathTab" href="javascript:void(0)"/>
+					<g:Anchor ui:field="mathTab" href="javascript:void(0)" />
 				</li>
 				<li>
-					<g:Anchor ui:field="functionsTab" href="javascript:void(0)"/>
+					<g:Anchor ui:field="functionsTab" href="javascript:void(0)" />
 				</li>
 			</ul>
 			<g:HTML ui:field="movementsPanel" styleName="{style.tab}" />

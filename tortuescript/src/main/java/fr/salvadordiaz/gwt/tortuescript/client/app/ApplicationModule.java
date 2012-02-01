@@ -30,11 +30,11 @@ import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity.SearchDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.search.SearchPlace;
 import fr.salvadordiaz.gwt.tortuescript.client.search.ui.DesktopSearchDisplay;
-import fr.salvadordiaz.gwt.tortuescript.client.sidebar.EmailPrompt;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.GistActionsPopup;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.Sidebar;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity;
-import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.EmailPromptDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay.GistActionsDisplay;
 
 public class ApplicationModule extends AbstractGinModule {
 
@@ -49,7 +49,7 @@ public class ApplicationModule extends AbstractGinModule {
 		bind(FluidContainer.class).in(Singleton.class);
 		bind(Navbar.class).in(Singleton.class);
 
-		bind(EmailPromptDisplay.class).to(EmailPrompt.class).in(Singleton.class);
+		bind(GistActionsDisplay.class).to(GistActionsPopup.class).in(Singleton.class);
 		bind(SidebarDisplay.class).to(Sidebar.class).in(Singleton.class);
 		bind(SidebarActivity.class).in(Singleton.class);
 

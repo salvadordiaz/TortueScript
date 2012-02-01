@@ -58,9 +58,7 @@ public class SearchActivity extends PlaceAwareActivity {
 			new RequestBuilder(RequestBuilder.GET, selectedItem.getUrl()).sendRequest("", new RequestCallback() {
 				@Override
 				public void onResponseReceived(Request request, Response response) {
-					final JsonGist fullGist = JsonGist.create(response.getText());
-					storage.saveProgram(fullGist);
-					placeController.goTo(new WorkspacePlace(fullGist.getFile().getFilename()));
+					placeController.goTo(new WorkspacePlace(storage.parseAndSave(response.getText()).getFile().getFilename()));
 				}
 
 				@Override

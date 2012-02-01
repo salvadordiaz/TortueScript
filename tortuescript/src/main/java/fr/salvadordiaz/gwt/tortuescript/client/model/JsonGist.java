@@ -1,6 +1,7 @@
 package fr.salvadordiaz.gwt.tortuescript.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 
 public class JsonGist extends JavaScriptObject {
@@ -13,8 +14,16 @@ public class JsonGist extends JavaScriptObject {
 			return this.locale;
 		}-*/;
 
+		public final native void setLocale(String locale)/*-{
+			this.locale = locale;
+		}-*/;
+
 		public final native String getUser()/*-{
 			return this.user;
+		}-*/;
+
+		private final native void setUser(String user)/*-{
+			this.user = user;
 		}-*/;
 
 	}
@@ -40,8 +49,19 @@ public class JsonGist extends JavaScriptObject {
 	protected JsonGist() {
 	}
 
-	public static native JsonGist create(String filename, String content)/*-{
+	public static JsonGist create(String filename, String content, String locale, String username) {
+		final JsonGist result = create(filename, content);
+		final GistDescription description = result.getDescription();
+		description.setUser(username);
+		description.setLocale(locale);
+		result.setDescription(description);
+		return result;
+	}
+
+	private static native JsonGist create(String filename, String content)/*-{
 		return {
+			"description" : "{}",
+			"public" : true,
 			"files" : {
 				filename : {
 					"filename" : filename,
@@ -51,15 +71,38 @@ public class JsonGist extends JavaScriptObject {
 		};
 	}-*/;
 
-	public static final JsonGist create(String jsonString){
-		return JSONParser.parseStrict(jsonString).isObject().getJavaScriptObject().cast();
-	}
-	
-	public final GistDescription getDescription() {
-		return JSONParser.parseStrict(nativeDescription()).isObject().getJavaScriptObject().cast();
+	public static native JsonGist createExample(String filename, String content)/*-{
+		return {
+			"description" : "{\"user\":\"tortuescript@sfeir.com\"}",
+			"files" : {
+				filename : {
+					"filename" : filename,
+					"content" : content
+				}
+			},
+			"html_url" : "javascript:;"
+		};
+	}-*/;
+
+	public final void setUser(String user) {
+		final GistDescription description = getDescription();
+		description.setUser(user);
+		setDescription(description);
 	}
 
-	private native String nativeDescription()/*-{
+	public final GistDescription getDescription() {
+		return JSONParser.parseStrict(nativeGetDescription()).isObject().getJavaScriptObject().cast();
+	}
+
+	public final void setDescription(GistDescription description) {
+		nativeSetDescription(new JSONObject(description).toString());
+	}
+
+	private native void nativeSetDescription(String description)/*-{
+		this.description = description;
+	}-*/;
+
+	private native String nativeGetDescription()/*-{
 		return this.description;
 	}-*/;
 
@@ -79,5 +122,4 @@ public class JsonGist extends JavaScriptObject {
 	public native final String getHtmlUrl()/*-{
 		return this.html_url;
 	}-*/;
-
 }

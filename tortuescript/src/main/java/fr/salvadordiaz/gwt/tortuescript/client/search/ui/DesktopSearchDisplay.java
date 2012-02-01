@@ -1,9 +1,12 @@
 package fr.salvadordiaz.gwt.tortuescript.client.search.ui;
 
+import static com.google.common.base.Objects.*;
 import static com.google.common.collect.Lists.*;
 
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
@@ -13,9 +16,11 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -40,6 +45,12 @@ public class DesktopSearchDisplay extends Composite implements SearchDisplay {
 	interface CellTemplates extends SafeHtmlTemplates {
 		@Template("<a href=\"{1}\" target=\"_blank\">{0}</a>")
 		SafeHtml anchor(String name, SafeUri url);
+
+		@Template("<button type=\"button\" tabindex=\"-1\" class=\"btn\" disabled=\"true\">{0}</button>")
+		SafeHtml disabledButton(SafeHtml text);
+
+		@Template("<button type=\"button\" tabindex=\"-1\" class=\"btn\">{0}</button>")
+		SafeHtml button(SafeHtml text);
 	}
 
 	@UiField
@@ -53,11 +64,15 @@ public class DesktopSearchDisplay extends Composite implements SearchDisplay {
 
 	private final Messages messages = GWT.create(Messages.class);
 	private final CellTemplates templates = GWT.create(CellTemplates.class);
+	private final Map<String, String> localeNames;
+	private final String currentLocaleName;
 
 	public DesktopSearchDisplay() {
 		initWidget(uiBinder.createAndBindUi(this));
 		header.setInnerText(messages.searchProgramsHeader());
 		subheader.setInnerText(messages.searchProgramsSubheader());
+		localeNames = ImmutableMap.of("fr", messages.french(), "en", messages.english());
+		currentLocaleName = LocaleInfo.getCurrentLocale().getLocaleName();
 		createTable();
 	}
 
@@ -74,6 +89,12 @@ public class DesktopSearchDisplay extends Composite implements SearchDisplay {
 				return templates.anchor(object.getFile().getFilename(), UriUtils.fromString(object.getHtmlUrl()));
 			}
 		};
+		TextColumn<JsonGist> localeColumn = new TextColumn<JsonGist>() {
+			@Override
+			public String getValue(JsonGist object) {
+				return localeNames.get(object.getDescription().getLocale());
+			}
+		};
 		Column<JsonGist, String> buttonColumn = new Column<JsonGist, String>(new BootstrapBtnCell()) {
 			@Override
 			public String getValue(JsonGist object) {
@@ -88,6 +109,7 @@ public class DesktopSearchDisplay extends Composite implements SearchDisplay {
 		});
 		table.addColumn(userColumn, messages.programTableUser());
 		table.addColumn(nameColumn, messages.programTableName());
+		table.addColumn(localeColumn, messages.programTableLocale());
 		table.addColumn(buttonColumn);
 		table.setWidth("100%", true);
 	}
@@ -105,14 +127,16 @@ public class DesktopSearchDisplay extends Composite implements SearchDisplay {
 		table.setRowData(list);
 	}
 
-	static class BootstrapBtnCell extends ButtonCell {
+	class BootstrapBtnCell extends ButtonCell {
 		@Override
 		public void render(Context context, SafeHtml data, SafeHtmlBuilder sb) {
-			sb.appendHtmlConstant("<button type=\"button\" tabindex=\"-1\" class=\"btn\">");
-			if (data != null) {
-				sb.append(data);
+			final boolean enabled = table.getVisibleItem(context.getIndex()).getDescription().getLocale().equalsIgnoreCase(currentLocaleName);
+			final SafeHtml safeData = firstNonNull(data, SafeHtmlUtils.EMPTY_SAFE_HTML);
+			if (enabled) {
+				sb.append(templates.button(safeData));
+			} else {
+				sb.append(templates.disabledButton(safeData));
 			}
-			sb.appendHtmlConstant("</button>");
 		}
 	}
 

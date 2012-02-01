@@ -1,9 +1,11 @@
 package fr.salvadordiaz.gwt.tortuescript.client.i18n;
 
+import com.google.gwt.i18n.client.LocalizableResource.DefaultLocale;
 import com.google.gwt.i18n.client.LocalizableResource.Generate;
 import com.google.gwt.safehtml.shared.SafeHtml;
 
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
+@DefaultLocale("en")
 public interface LocalizedDocumentation extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Commands are entered on individual lines. TortueScript commands and variables are not case-sensitive. The following commands are currently supported by TortueScript")

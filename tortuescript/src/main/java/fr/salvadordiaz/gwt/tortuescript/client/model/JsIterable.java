@@ -13,7 +13,7 @@ public class JsIterable<T extends JavaScriptObject> extends JsArray<T> {
 	protected JsIterable() {
 	}
 
-	public static final <T extends JavaScriptObject> JsIterable<T> create(String object){
+	public static final <T extends JavaScriptObject> JsIterable<T> create(String object) {
 		return JSONParser.parseStrict(object).isArray().getJavaScriptObject().cast();
 	};
 
@@ -40,5 +40,4 @@ public class JsIterable<T extends JavaScriptObject> extends JsArray<T> {
 			}
 		};
 	}
-
 }

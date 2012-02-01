@@ -1,17 +1,16 @@
 package fr.salvadordiaz.gwt.tortuescript.client.i18n;
 
 import com.google.gwt.i18n.client.LocalizableResource.Generate;
+import com.google.gwt.i18n.client.LocalizableResource.DefaultLocale;;
 
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
+@DefaultLocale("en")
 public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	/*Sidebar*/
 
 	@DefaultMessage("Your drawings")
 	String savedItems();
-
-	@DefaultMessage("Delete all saved drawings")
-	String clearSavedItems();
 
 	@DefaultMessage("Box")
 	String boxExample();
@@ -26,7 +25,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Editor")
 	String workspaceHeader();
-	
+
 	@DefaultMessage("Execute !")
 	String execute();
 
@@ -74,6 +73,8 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	String functionsTab();
 
 	/*Sharing*/
+	@DefaultMessage("Program : {0}")
+	String gistPopupTitle(String gistName);
 
 	@DefaultMessage("Enter your email")
 	String enterYourEmail();
@@ -81,13 +82,13 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("OK")
 	String saveEmail();
 
-	@DefaultMessage("Your program was successfully saved.")
+	@DefaultMessage("Your program was successfully shared.")
 	String programWasShared();
 
 	@DefaultMessage("Error while sharing program.")
 	String sharingError();
 
-	@DefaultMessage("Load programs")
+	@DefaultMessage("Find more programs")
 	String loadPrograms();
 
 	/*Search*/
@@ -104,6 +105,9 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("Program")
 	String programTableName();
 
+	@DefaultMessage("Language")
+	String programTableLocale();
+
 	@DefaultMessage("Unable to search programs.")
 	String errorSearchingPrograms();
 
@@ -112,5 +116,29 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Unable to load program {0} from GitHub.")
 	String errorLoadingProgram(String filename);
+
+	@DefaultMessage("Show on GitHub")
+	String showOnGithub();
+
+	@DefaultMessage("Shared by {0}")
+	String author(String user);
+
+	@DefaultMessage("Share on GitHub !")
+	String shareOnGithub();
+
+	@DefaultMessage("Share")
+	String shareButton();
+
+	@DefaultMessage("Hhelps you identify your programs on GitHub.")
+	String emailHelp();
+
+	@DefaultMessage("Delete")
+	String deleteProgram();
+
+	@DefaultMessage("French")
+	String french();
+
+	@DefaultMessage("English")
+	String english();
 
 }
