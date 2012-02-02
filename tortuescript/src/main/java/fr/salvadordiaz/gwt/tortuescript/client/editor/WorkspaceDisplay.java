@@ -10,6 +10,8 @@ public interface WorkspaceDisplay extends IsWidget {
 
 	HasClickHandlers getExecuteButton();
 
+	HasClickHandlers getStopButton();
+	
 	HasClickHandlers getSaveButton();
 
 	HasText getNameEditor();

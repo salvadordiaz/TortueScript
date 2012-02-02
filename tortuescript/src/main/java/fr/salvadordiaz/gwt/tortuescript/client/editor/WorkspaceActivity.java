@@ -5,7 +5,6 @@ import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +16,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.DiscreteDomains;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ranges;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,6 +36,7 @@ public class WorkspaceActivity extends PlaceAwareActivity {
 	private final LocalizedCommands localizedCommands;
 	private final Messages messages;
 	private final ProgramStorage storage;
+	private final ProgramScheduler scheduler;
 
 	private final Map<String, Double> userVariables = newHashMap();
 	private final Map<String, List<Iterable<String>>> functions = newHashMap();
@@ -50,11 +48,12 @@ public class WorkspaceActivity extends PlaceAwareActivity {
 	private String programName;
 
 	@Inject
-	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages, ProgramStorage storage) {
+	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages, ProgramStorage storage, ProgramScheduler scheduler) {
 		this.workspace = workspace;
 		this.localizedCommands = localizedCommands;
 		this.messages = messages;
 		this.storage = storage;
+		this.scheduler = scheduler;
 		bind();
 	}
 
@@ -85,6 +84,12 @@ public class WorkspaceActivity extends PlaceAwareActivity {
 				save();
 			}
 		});
+		workspace.getStopButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scheduler.togglePlayPause();
+			}
+		});
 	}
 
 	private void save() {
@@ -96,17 +101,7 @@ public class WorkspaceActivity extends PlaceAwareActivity {
 	private void execute() {
 		final List<String> lines = ImmutableList.copyOf(lineSplitter.split(workspace.getCodeEditor().getText()));
 		final List<Iterable<String>> lineTokens = transform(lines, splitTokens);
-		final Iterator<ScheduledCommand> commands = interpret(lineTokens).iterator();
-		Scheduler.get().scheduleFixedPeriod(new RepeatingCommand() {
-			@Override
-			public boolean execute() {
-				if (commands.hasNext()) {
-					commands.next().execute();
-					return commands.hasNext();
-				}
-				return false;
-			}
-		}, 20);
+		scheduler.execute(interpret(lineTokens));
 	}
 
 	private final Function<String, Iterable<String>> splitTokens = new Function<String, Iterable<String>>() {

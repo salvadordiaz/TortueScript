@@ -129,7 +129,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("Share")
 	String shareButton();
 
-	@DefaultMessage("Hhelps you identify your programs on GitHub.")
+	@DefaultMessage("Helps you identify your programs on GitHub.")
 	String emailHelp();
 
 	@DefaultMessage("Delete")
@@ -141,4 +141,6 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("English")
 	String english();
 
+	@DefaultMessage("Pause / Resume")
+	String pauseResume();
 }

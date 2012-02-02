@@ -7,12 +7,9 @@
 			height: 600px;
 			border: 2px solid;
 			border-color: rgba(82, 168, 236, 0.8);
-			-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px
-				rgba(82, 168, 236, 0.6);
-			-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px
-				rgba(82, 168, 236, 0.6);
-			box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px
-				rgba(82, 168, 236, 0.6);
+			-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+			-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+			box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
 			border-radius: 4px 4px 4px 4px;
 		}
 		
@@ -37,8 +34,9 @@
 		<div class="well">
 			<g:TextArea ui:field="textArea" styleName="{style.text}" />
 			<div class="form-horizontal">
-				<g:Button ui:field="syntaxButton" styleName="btn btn-primary" />
 				<g:Button ui:field="executeButton" styleName="btn btn-success" />
+				<g:Button ui:field="stopButton" styleName="btn"/>
+				<g:Button ui:field="syntaxButton" styleName="btn btn-primary" />
 				<div class="pull-right">
 					<g:Button ui:field="saveButton" styleName="btn" enabled="false" />
 					<g:TextBox styleName="xlarge" ui:field="nameInput" visibleLength="30" />

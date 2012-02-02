@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -19,6 +20,7 @@ import com.google.inject.Provides;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
+import fr.salvadordiaz.gwt.tortuescript.client.editor.ProgramScheduler;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.Workspace;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceDisplay;
@@ -54,6 +56,7 @@ public class ApplicationModule extends AbstractGinModule {
 		bind(SidebarActivity.class).in(Singleton.class);
 
 		bind(WorkspaceDisplay.class).to(Workspace.class).in(Singleton.class);
+		bind(ProgramScheduler.class).in(Singleton.class);
 		bind(WorkspaceActivity.class).in(Singleton.class);
 
 		bind(SearchActivity.class).in(Singleton.class);
@@ -66,6 +69,12 @@ public class ApplicationModule extends AbstractGinModule {
 	@Singleton
 	ProgramStorage provideLocalStorage() {
 		return new ProgramStorage(Storage.getLocalStorageIfSupported());
+	}
+
+	@Provides
+	@Singleton
+	Scheduler provideScheduler() {
+		return Scheduler.get();
 	}
 
 	@Provides

@@ -49,6 +49,8 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	@UiField
 	Button executeButton;
 	@UiField
+	Button stopButton;
+	@UiField
 	TextBox nameInput;
 	@UiField
 	Button saveButton;
@@ -84,6 +86,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		tortueElement.setSrc(tortue.icon().getSafeUri().asString());
 		messages = GWT.create(Messages.class);
 		executeButton.setText(messages.execute());
+		stopButton.setText(messages.pauseResume());
 		saveButton.setText(messages.save());
 		syntaxButton.setText(messages.showSyntax());
 		//set the initial position to the center of the canvas
@@ -99,7 +102,7 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 		}
 	};
 
-	@UiHandler("syntaxButton")
+	@UiHandler({ "syntaxButton" })
 	void showSyntax(ClickEvent event) {
 		syntaxPopup.setPopupPositionAndShow(positionCallback);
 	}
@@ -130,6 +133,11 @@ public class Workspace extends Composite implements WorkspaceDisplay {
 	@Override
 	public HasClickHandlers getExecuteButton() {
 		return executeButton;
+	}
+
+	@Override
+	public HasClickHandlers getStopButton() {
+		return stopButton;
 	}
 
 	@Override
