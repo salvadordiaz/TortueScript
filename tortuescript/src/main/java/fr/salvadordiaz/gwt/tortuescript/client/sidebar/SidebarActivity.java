@@ -7,16 +7,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.storage.client.StorageEvent;
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,6 +22,7 @@ import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
 import fr.salvadordiaz.gwt.tortuescript.client.model.JsonGist;
 import fr.salvadordiaz.gwt.tortuescript.client.model.ProgramStorage;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay.GistActionsDisplay;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.rpc.SharingRpcAsync;
 
 public class SidebarActivity extends AbstractActivity {
 
@@ -47,24 +44,22 @@ public class SidebarActivity extends AbstractActivity {
 		}
 	}
 
-	private final RequestBuilder shareGistBuilder = new RequestBuilder(RequestBuilder.POST, "https://api.github.com/gists");
-	private final RequestBuilder getGistsBuilder = new RequestBuilder(RequestBuilder.GET, "https://api.github.com/users/tortuescript/gists");
-
 	private final SidebarDisplay sidebarDisplay;
 	private final GistActionsDisplay gistActionsDisplay;
 	private final LocalizedCommands commands;
 	private final Messages messages;
 	private final ProgramStorage programStorage;
+	private final SharingRpcAsync sharingRpc;
 
 	@Inject
-	public SidebarActivity(SidebarDisplay sidebarDisplay, LocalizedCommands commands, Messages messages, ProgramStorage programStorage) {
+	public SidebarActivity(SidebarDisplay sidebarDisplay, LocalizedCommands commands, Messages messages, ProgramStorage programStorage,
+			SharingRpcAsync sharingRpc) {
 		this.sidebarDisplay = sidebarDisplay;
 		this.gistActionsDisplay = sidebarDisplay.getActionsDisplay();
 		this.commands = commands;
 		this.messages = messages;
 		this.programStorage = programStorage;
-		shareGistBuilder.setHeader("Authorization", "Basic " + encode(""));
-		shareGistBuilder.setHeader("Content-Type", "text/plain");
+		this.sharingRpc = sharingRpc;
 	}
 
 	private void bind() {
@@ -115,26 +110,18 @@ public class SidebarActivity extends AbstractActivity {
 	}
 
 	private void shareAndSave(JsonGist gist) {
-		try {
-			shareGistBuilder.sendRequest(new JSONObject(gist).toString(), new RequestCallback() {
-				@Override
-				public void onResponseReceived(Request request, Response response) {
-					Window.alert(messages.programWasShared());
-					programStorage.parseAndSave(response.getText());
-				}
+		sharingRpc.share(new JSONObject(gist).toString(), new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String result) {
+				Window.alert(messages.programWasShared());
+				programStorage.parseAndSave(result);
+			}
 
-				@Override
-				public void onError(Request request, Throwable exception) {
-					Window.alert(messages.sharingError());
-				}
-			});
-		} catch (RequestException e) {
-			//motherfucking checked exception
-			Window.alert(messages.sharingError());
-		}
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(messages.sharingError());
+			}
+		});
 	}
 
-	private native String encode(String text)/*-{
-		return $wnd.btoa(text);
-	}-*/;
 }
