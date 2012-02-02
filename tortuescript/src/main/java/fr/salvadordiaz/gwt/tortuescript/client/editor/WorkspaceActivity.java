@@ -17,7 +17,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.DiscreteDomains;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ranges;
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -25,18 +24,21 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import fr.salvadordiaz.gwt.tortuescript.client.app.PlaceAwareActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.i18n.LocalizedCommands;
 import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
+import fr.salvadordiaz.gwt.tortuescript.client.model.JsonGist;
+import fr.salvadordiaz.gwt.tortuescript.client.model.ProgramStorage;
 
-public class WorkspaceActivity extends AbstractActivity {
+public class WorkspaceActivity extends PlaceAwareActivity {
 
 	private final WorkspaceDisplay workspace;
 	private final LocalizedCommands localizedCommands;
 	private final Messages messages;
+	private final ProgramStorage storage;
 
 	private final Map<String, Double> userVariables = newHashMap();
 	private final Map<String, List<Iterable<String>>> functions = newHashMap();
@@ -48,18 +50,19 @@ public class WorkspaceActivity extends AbstractActivity {
 	private String programName;
 
 	@Inject
-	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages) {
+	public WorkspaceActivity(WorkspaceDisplay workspace, LocalizedCommands localizedCommands, Messages messages, ProgramStorage storage) {
 		this.workspace = workspace;
 		this.localizedCommands = localizedCommands;
 		this.messages = messages;
+		this.storage = storage;
 		bind();
 	}
 
 	public void setPlace(Place place) {
 		programName = nullToEmpty(((WorkspacePlace) place).getProgramName()).trim();
-		if (!programName.isEmpty()) {
-			final String program = Storage.getLocalStorageIfSupported().getItem(programName);
-			workspace.getCodeEditor().setText(program);
+		final JsonGist program = storage.getProgram(programName);
+		if (program != null) {
+			workspace.getCodeEditor().setText(program.getFile().getContent());
 			execute();
 		}
 	}
@@ -67,12 +70,6 @@ public class WorkspaceActivity extends AbstractActivity {
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		panel.setWidget(workspace);
-	}
-
-	@Override
-	public String mayStop() {
-		System.out.println("Place change was requested, TODO: cancel if there are unsaved changes");
-		return null;
 	}
 
 	private void bind() {
@@ -93,9 +90,7 @@ public class WorkspaceActivity extends AbstractActivity {
 	private void save() {
 		final String nameToSave = nullToEmpty(workspace.getNameEditor().getText()).trim();
 		final String programToSave = nullToEmpty(workspace.getCodeEditor().getText()).trim();
-		if (!nameToSave.isEmpty() && !programToSave.isEmpty()) {
-			Storage.getLocalStorageIfSupported().setItem(nameToSave, programToSave);
-		}
+		storage.saveProgram(nameToSave, programToSave);
 	}
 
 	private void execute() {

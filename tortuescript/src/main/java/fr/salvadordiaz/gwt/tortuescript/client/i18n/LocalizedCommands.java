@@ -6,6 +6,15 @@ import com.google.gwt.i18n.client.LocalizableResource.Generate;
 @Generate(format = "com.google.gwt.i18n.rebind.format.PropertiesFormat")
 public interface LocalizedCommands extends Constants {
 
+	@DefaultStringValue("box")
+	String boxExample();
+	
+	@DefaultStringValue("flower")
+	String flowerExample();
+	
+	@DefaultStringValue("bigflower")
+	String bigFlowerExample();
+	
 	@DefaultStringValue("pendown")
 	String penDownCommand();
 

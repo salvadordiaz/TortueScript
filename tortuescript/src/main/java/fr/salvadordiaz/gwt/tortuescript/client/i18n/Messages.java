@@ -7,24 +7,26 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	/*Sidebar*/
 
-	@DefaultMessage("Try some examples")
-	String examples();
-
 	@DefaultMessage("Your drawings")
 	String savedItems();
-
-	@DefaultMessage("You don''t have any saved drawings")
-	String noSavedItems();
 
 	@DefaultMessage("Delete all saved drawings")
 	String clearSavedItems();
 
+	@DefaultMessage("Box")
+	String boxExample();
 
-	@DefaultMessage("TortueScript reference syntax")
-	String syntaxTitle();
+	@DefaultMessage("Flower")
+	String flowerExample();
+
+	@DefaultMessage("Big Flower")
+	String bigFlowerExample();
 
 	/*Workspace*/
 
+	@DefaultMessage("Editor")
+	String workspaceHeader();
+	
 	@DefaultMessage("Execute !")
 	String execute();
 
@@ -33,7 +35,7 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Show syntax")
 	String showSyntax();
-	
+
 	@DefaultMessage("Example")
 	String example();
 
@@ -54,6 +56,11 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 	@DefaultMessage("Unrecognized statement at line {0}")
 	String unrecognizedStatement(int lineIndex);
 
+	/*Docs*/
+
+	@DefaultMessage("TortueScript reference syntax")
+	String syntaxTitle();
+
 	@DefaultMessage("Movements")
 	String movementsTab();
 
@@ -65,5 +72,45 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Functions")
 	String functionsTab();
+
+	/*Sharing*/
+
+	@DefaultMessage("Enter your email")
+	String enterYourEmail();
+
+	@DefaultMessage("OK")
+	String saveEmail();
+
+	@DefaultMessage("Your program was successfully saved.")
+	String programWasShared();
+
+	@DefaultMessage("Error while sharing program.")
+	String sharingError();
+
+	@DefaultMessage("Load programs")
+	String loadPrograms();
+
+	/*Search*/
+
+	@DefaultMessage("Search")
+	String searchProgramsHeader();
+
+	@DefaultMessage("Programs shared by other users")
+	String searchProgramsSubheader();
+
+	@DefaultMessage("User")
+	String programTableUser();
+
+	@DefaultMessage("Program")
+	String programTableName();
+
+	@DefaultMessage("Unable to search programs.")
+	String errorSearchingPrograms();
+
+	@DefaultMessage("Open")
+	String open();
+
+	@DefaultMessage("Unable to load program {0} from GitHub.")
+	String errorLoadingProgram(String filename);
 
 }

@@ -1,5 +1,7 @@
 package fr.salvadordiaz.gwt.tortuescript.client.layout;
 
+import javax.inject.Inject;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -15,12 +17,16 @@ public class FluidContainer extends Composite {
 	interface FluidContainerUiBinder extends UiBinder<Widget, FluidContainer> {
 	}
 
+	@UiField(provided = true)
+	Navbar navbar;
 	@UiField
 	SimplePanel sidebarContainer;
 	@UiField
 	SimplePanel centerContainer;
 
-	public FluidContainer() {
+	@Inject
+	public FluidContainer(Navbar navbar) {
+		this.navbar = navbar;
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 

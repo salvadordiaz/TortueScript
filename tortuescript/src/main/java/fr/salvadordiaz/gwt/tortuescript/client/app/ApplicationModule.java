@@ -1,7 +1,10 @@
 package fr.salvadordiaz.gwt.tortuescript.client.app;
 
+import java.util.Map;
+
 import javax.inject.Singleton;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -11,6 +14,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
+import com.google.gwt.storage.client.Storage;
 import com.google.inject.Provides;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -20,13 +24,21 @@ import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspacePlace;
 import fr.salvadordiaz.gwt.tortuescript.client.layout.FluidContainer;
+import fr.salvadordiaz.gwt.tortuescript.client.layout.Navbar;
+import fr.salvadordiaz.gwt.tortuescript.client.model.ProgramStorage;
+import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity;
+import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity.SearchDisplay;
+import fr.salvadordiaz.gwt.tortuescript.client.search.SearchPlace;
+import fr.salvadordiaz.gwt.tortuescript.client.search.ui.DesktopSearchDisplay;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.EmailPrompt;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.Sidebar;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.EmailPromptDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay;
 
 public class ApplicationModule extends AbstractGinModule {
 
-	@WithTokenizers({ WorkspacePlace.Tokenizer.class })
+	@WithTokenizers({ WorkspacePlace.Tokenizer.class, SearchPlace.Tokenizer.class })
 	public static interface WorkspaceHistoryMapper extends PlaceHistoryMapper {
 	}
 
@@ -35,27 +47,47 @@ public class ApplicationModule extends AbstractGinModule {
 		bind(PlaceHistoryMapper.class).to(WorkspaceHistoryMapper.class).in(Singleton.class);
 		bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
 		bind(FluidContainer.class).in(Singleton.class);
+		bind(Navbar.class).in(Singleton.class);
 
+		bind(EmailPromptDisplay.class).to(EmailPrompt.class).in(Singleton.class);
 		bind(SidebarDisplay.class).to(Sidebar.class).in(Singleton.class);
 		bind(SidebarActivity.class).in(Singleton.class);
 
 		bind(WorkspaceDisplay.class).to(Workspace.class).in(Singleton.class);
 		bind(WorkspaceActivity.class).in(Singleton.class);
+
+		bind(SearchActivity.class).in(Singleton.class);
+		bind(SearchDisplay.class).to(DesktopSearchDisplay.class).in(Singleton.class);
 		//this is the configuration of the default place
 		bind(Place.class).to(WorkspacePlace.class).in(Singleton.class);
 	}
 
 	@Provides
 	@Singleton
-	ActivityMapper provideActivityMapper(final WorkspaceActivity workspaceActivity) {
-		//there is only one activity, the ActivityMapper will always return the workspaceActivity, setting the new place before doing so
+	ProgramStorage provideLocalStorage() {
+		return new ProgramStorage(Storage.getLocalStorageIfSupported());
+	}
+
+	@Provides
+	@Singleton
+	ActivityMapper provideActivityMapper(final WorkspaceActivity workspaceActivity, final SearchActivity searchActivity) {
+		final Map<Class<? extends Place>, PlaceAwareActivity> mappings = ImmutableMap.<Class<? extends Place>, PlaceAwareActivity> of(//
+				WorkspacePlace.class, workspaceActivity,// 
+				SearchPlace.class, searchActivity);
 		return new ActivityMapper() {
 			@Override
 			public Activity getActivity(Place place) {
-				workspaceActivity.setPlace(place);
-				return workspaceActivity;
+				final PlaceAwareActivity activity = mappings.get(place.getClass());
+				activity.setPlace(place);
+				return activity;
 			}
 		};
+	}
+
+	@Provides
+	@Singleton
+	PlaceController providePlaceController(EventBus eventBus) {
+		return new PlaceController(eventBus);
 	}
 
 	@Provides
@@ -63,6 +95,7 @@ public class ApplicationModule extends AbstractGinModule {
 	PlaceHistoryHandler provideHistoryHandler(//
 			EventBus eventBus,//
 			PlaceHistoryMapper mapper,//
+			PlaceController placeController,//
 			Place place,// default place
 			ActivityMapper activityMapper,//
 			FluidContainer display,//
@@ -76,7 +109,7 @@ public class ApplicationModule extends AbstractGinModule {
 		sidebarActivity.start(display.getSidebarContainer(), null);
 		// 
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(mapper);
-		historyHandler.register(new PlaceController(eventBus), eventBus, place);
+		historyHandler.register(placeController, eventBus, place);
 		return historyHandler;
 	}
 

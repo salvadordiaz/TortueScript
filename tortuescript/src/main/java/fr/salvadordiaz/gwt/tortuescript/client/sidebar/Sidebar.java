@@ -7,8 +7,6 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LIElement;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,42 +26,32 @@ public class Sidebar extends Composite implements SidebarDisplay {
 	}
 
 	@UiField
-	Element examplesHeader;
-	@UiField
-	Element savedItemsHeader;
-	@UiField
 	Element savedItems;
 	@UiField
-	Element defaultItem;
+	Element savedItemsHeader;
 	@UiField
 	Anchor clearProgramsLabel;
 	@UiField
 	Anchor loadProgramsLabel;
 
+	AnchorElement activeElement;
+	
 	@Inject
 	public Sidebar(Messages messages) {
 		initWidget(uiBinder.createAndBindUi(this));
-		examplesHeader.setInnerText(messages.examples());
 		savedItemsHeader.setInnerText(messages.savedItems());
-		defaultItem.setInnerText(messages.noSavedItems());
 		clearProgramsLabel.setText(messages.clearSavedItems());
 		loadProgramsLabel.setText(messages.loadPrograms());
 	}
 
 	@Override
 	public void clearUserItems() {
-		final NodeList<Node> childNodes = savedItems.getChildNodes();
-		for (int childIndex = 0; childIndex < childNodes.getLength(); childIndex++) {
-			savedItems.removeChild(savedItems.getChild(childIndex));
-		}
+		savedItems.setInnerHTML("");
 		savedItems.appendChild(savedItemsHeader);
 	}
 
 	@Override
 	public void addItem(String key) {
-		if (defaultItem.hasParentElement()) {
-			savedItems.removeChild(defaultItem);
-		}
 		AnchorElement anchorElement = Document.get().createAnchorElement();
 		anchorElement.setHref("#editor:" + URL.encode(key));
 		anchorElement.setInnerText(key);

@@ -15,7 +15,7 @@ public class Examples {
 	}
 
 	public String getBox() {
-		String boxFunctionName = "BOX";
+		String boxFunctionName = commands.boxExample();
 		return createProgram(//
 				with(commands.toCommand(), boxFunctionName)//
 				, with(commands.repeatCommand(), 4)//
@@ -24,11 +24,13 @@ public class Examples {
 				, with(commands.endCommand(), commands.repeatCommand())//
 				, with(commands.endCommand(), commands.toCommand())//
 				, with(commands.penColorCommand(), "GREEN")//
+				, commands.clearCommand()//
+				, commands.homeCommand()//
 				, boxFunctionName);
 	}
 
 	public String getFlower() {
-		String flowerFunctionName = "FLOWER";
+		String flowerFunctionName = commands.flowerExample();
 		return createProgram(//
 				with(commands.toCommand(), flowerFunctionName)//
 				, with(commands.repeatCommand(), 9)//
@@ -46,6 +48,7 @@ public class Examples {
 				, with(commands.forwardCommand(), 10)//
 				, with(commands.endCommand(), commands.repeatCommand())//
 				, with(commands.endCommand(), commands.toCommand())//
+				, with(commands.penColorCommand(), "RED")//
 				, commands.clearCommand()//
 				, commands.homeCommand()//
 				, flowerFunctionName);
@@ -58,9 +61,9 @@ public class Examples {
 		String blue = "blue";
 		String green = "green";
 		String forwardAmount = "forwardamount";
+		String bigFlowerFunctionName = commands.bigFlowerExample();
 		return createProgram(//
-				commands.clearCommand()//
-				, commands.homeCommand()//
+				with(commands.toCommand(), bigFlowerFunctionName)//
 				, with(commands.makeCommand(), index, "=", 1)//
 				, with(commands.makeCommand(), color, "=", 200)//
 				, with(commands.repeatCommand(), 500)//
@@ -76,7 +79,11 @@ public class Examples {
 				, with(commands.ifCommand(), color, ">", 255)//
 				, with(commands.makeCommand(), color, "=", 200)//
 				, with(commands.endCommand(), commands.ifCommand())//
-				, with(commands.endCommand(), commands.repeatCommand()));
+				, with(commands.endCommand(), commands.repeatCommand())//
+				, with(commands.endCommand(), commands.toCommand())//
+				, commands.clearCommand()//
+				, commands.homeCommand()//
+				, bigFlowerFunctionName);
 	}
 
 	private String with(Object... tokens) {

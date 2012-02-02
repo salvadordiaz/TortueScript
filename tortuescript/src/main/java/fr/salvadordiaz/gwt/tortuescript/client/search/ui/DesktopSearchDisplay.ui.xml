@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+		<div class="page-header">
+			<h1>
+				<span ui:field="header" />
+				&nbsp;
+				<small ui:field="subheader" />
+			</h1>
+		</div>
+		<g:HTMLPanel styleName="alert alert-error" visible="false" ui:field="errorPanel">
+			<g:Anchor ui:field="closeError" href="javascript:none()">&times;</g:Anchor>
+			<strong ui:field="errorTitle" />
+			<span ui:field="errorText"/>
+		</g:HTMLPanel>
+		<c:CellTable ui:field="table" />
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -11,7 +11,6 @@ public class TortueScript implements EntryPoint {
 
 	public void onModuleLoad() {
 		ApplicationGinjector ginjector = GWT.create(ApplicationGinjector.class);
-		RootPanel.get().add(new Navbar());
 		RootPanel.get().add(ginjector.display());
 		ginjector.getHistoryHandler().handleCurrentHistory();
 	}

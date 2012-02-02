@@ -11,7 +11,10 @@
 				<a class="brand" href="#">TortueScript</a>
 				<ul class="nav" ui:field="navigationList">
 					<li class="active">
-						<a href="#editor:">Editor</a>
+						<a href="#editor:" ui:field="editorLink" />
+					</li>
+					<li>
+						<a href="#search:" ui:field="searchLink" />
 					</li>
 				</ul>
 				<ul class="nav pull-right">
