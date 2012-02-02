@@ -1,4 +1,4 @@
-package fr.salvadordiaz.gwt.tortuescript.client.editor;
+package fr.salvadordiaz.gwt.tortuescript.client.editor.ui;
 
 import com.google.common.base.Joiner;
 import com.google.gwt.canvas.client.Canvas;
@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.i18n.Messages;
-import fr.salvadordiaz.gwt.tortuescript.client.sidebar.TortueScriptReference;
 
 public class Workspace extends Composite implements WorkspaceDisplay {
 

@@ -29,7 +29,7 @@
 			border-color: #EE5F5B
 		}
 	</ui:style>
-	<ui:with type="fr.salvadordiaz.gwt.tortuescript.client.editor.Workspace.Tortue" field="tortue" />
+	<ui:with type="fr.salvadordiaz.gwt.tortuescript.client.editor.ui.Workspace.Tortue" field="tortue" />
 	<g:HTMLPanel>
 		<div class="well">
 			<g:TextArea ui:field="textArea" styleName="{style.text}" />

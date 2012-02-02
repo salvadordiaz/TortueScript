@@ -21,10 +21,10 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
 import fr.salvadordiaz.gwt.tortuescript.client.editor.ProgramScheduler;
-import fr.salvadordiaz.gwt.tortuescript.client.editor.Workspace;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspaceDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.editor.WorkspacePlace;
+import fr.salvadordiaz.gwt.tortuescript.client.editor.ui.Workspace;
 import fr.salvadordiaz.gwt.tortuescript.client.layout.FluidContainer;
 import fr.salvadordiaz.gwt.tortuescript.client.layout.Navbar;
 import fr.salvadordiaz.gwt.tortuescript.client.model.ProgramStorage;
@@ -32,11 +32,11 @@ import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.search.SearchActivity.SearchDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.search.SearchPlace;
 import fr.salvadordiaz.gwt.tortuescript.client.search.ui.DesktopSearchDisplay;
-import fr.salvadordiaz.gwt.tortuescript.client.sidebar.GistActionsPopup;
-import fr.salvadordiaz.gwt.tortuescript.client.sidebar.Sidebar;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay;
 import fr.salvadordiaz.gwt.tortuescript.client.sidebar.SidebarActivity.SidebarDisplay.GistActionsDisplay;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.ui.GistActionsPopup;
+import fr.salvadordiaz.gwt.tortuescript.client.sidebar.ui.Sidebar;
 
 public class ApplicationModule extends AbstractGinModule {
 

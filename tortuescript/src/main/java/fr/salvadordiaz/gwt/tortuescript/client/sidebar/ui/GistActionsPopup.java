@@ -1,4 +1,4 @@
-package fr.salvadordiaz.gwt.tortuescript.client.sidebar;
+package fr.salvadordiaz.gwt.tortuescript.client.sidebar.ui;
 
 import javax.inject.Inject;
 

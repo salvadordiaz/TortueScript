@@ -1,4 +1,4 @@
-package fr.salvadordiaz.gwt.tortuescript.client.sidebar;
+package fr.salvadordiaz.gwt.tortuescript.client.editor.ui;
 
 import java.util.Map;
 
