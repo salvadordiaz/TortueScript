@@ -15,6 +15,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>cloudbees-release</id>
+			<url>https://repository-sfeirlabs.forge.cloudbees.com/release/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -49,11 +56,11 @@
 			<artifactId>nanojson</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>${gae.version}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.google.appengine</groupId> -->
+<!-- 			<artifactId>appengine-api-1.0-sdk</artifactId> -->
+<!-- 			<version>${gae.version}</version> -->
+<!-- 		</dependency> -->
 	</dependencies>
 
 	<build>
